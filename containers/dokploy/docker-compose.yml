@@ -1,0 +1,99 @@
+# WARP deployment for Dokploy (https://dokploy.com).
+#
+# In Dokploy: create a Compose service (Compose Type "Docker Compose"), point it
+# at this repository and set the Compose Path to
+#   ./containers/dokploy/docker-compose.yml
+# then paste .env.example into the Environment tab and add a domain in the
+# Domains tab (service warp-app, port 8080). See ../README.md#dokploy.
+#
+# Differences from the generic ../compose/compose.yaml: no Caddy container —
+# Dokploy's own Traefik is the reverse proxy, so uWSGI listens on TCP 8080 and
+# serves /static itself. Secrets come from the Dokploy environment instead of
+# compose secret files, since Dokploy manages them in its UI.
+#
+# Every other WARP_* setting (auth backends, booking window, …) can be added in
+# the Environment tab — env_file below injects them. See ../../CONFIGURATION.md.
+
+services:
+  warp-db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-warp}
+      POSTGRES_USER: ${POSTGRES_USER:-warp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in the Dokploy environment}
+      TZ: ${TZ:-UTC}
+    # postgres:18+ keeps PGDATA in /var/lib/postgresql/<major>/docker and declares
+    # the volume one level up, so the mount must be /var/lib/postgresql — mounting
+    # the pre-18 /var/lib/postgresql/data would silently start an empty database
+    # on every redeploy. Keep the major version pinned; a major bump needs a
+    # dump/restore.
+    volumes:
+      - warp-db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-warp} -d ${POSTGRES_DB:-warp}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - warp-internal
+
+  warp-app:
+    # Builds the image from the deployed checkout, so Dokploy ships the code on
+    # the branch it deployed. To run a published image instead, delete the build
+    # block and set e.g. image: ghcr.io/barcelona-tech-center-itu/warp:latest
+    build:
+      context: ../..
+      dockerfile: containers/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      warp-db:
+        condition: service_healthy
+    # Anything set in Dokploy's Environment tab lands in this .env file; loading
+    # it here makes every WARP_* setting configurable from the UI without editing
+    # this file. Absent on a bare `docker compose` run, hence required: false.
+    env_file:
+      - path: .env
+        required: false
+    # These win over the same keys in .env, so an external database or a
+    # different listen address has to be changed here, not in Dokploy's UI.
+    environment:
+      # uWSGI on TCP for Traefik, instead of the unix sockets the Caddy-based
+      # compose/quadlet setups use; the binary uWSGI socket stays disabled.
+      WARPAPP_UWSGI_HTTP_SOCKET: "0.0.0.0:8080"
+      WARPAPP_UWSGI_SOCKET: ""
+      WARP_DATABASE_ADDRESS: "warp-db:5432"
+      WARP_DATABASE_NAME: ${POSTGRES_DB:-warp}
+      WARP_DATABASE_USER: ${POSTGRES_USER:-warp}
+      WARP_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in the Dokploy environment}
+      WARP_SECRET_KEY: ${WARP_SECRET_KEY:?set WARP_SECRET_KEY in the Dokploy environment}
+      # Traefik terminates TLS, so the session cookie stays https-only. Set to
+      # false only while testing over plain http — browsers drop a Secure cookie
+      # on http and login then fails without an error message.
+      WARP_SESSION_COOKIE_SECURE: ${WARP_SESSION_COOKIE_SECURE:-true}
+      # Default timezone for new plans and reminders (per-plan values override it).
+      TZ: ${TZ:-UTC}
+    expose:
+      - "8080"
+    healthcheck:
+      # WARP has no health route and /login differs per auth backend, so this
+      # only proves uWSGI is accepting connections.
+      test: ["CMD", "python3", "-c", "import socket; socket.create_connection(('127.0.0.1', 8080), 3).close()"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - warp-internal
+      # Traefik reaches the app over dokploy-network. Dokploy attaches it itself
+      # when a domain is added; declaring it keeps this file deployable as-is.
+      - dokploy-network
+
+volumes:
+  warp-db-data:
+
+networks:
+  # Database is reachable from the app only.
+  warp-internal:
+  dokploy-network:
+    external: true

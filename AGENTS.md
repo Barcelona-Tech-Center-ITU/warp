@@ -36,7 +36,7 @@ js/                   # frontend source (JS, webpack → warp/static/dist/)
   views/              # one module per admin/booking view
 tests/                # pytest suite (pure-Python, no fixtures framework)
 e2e/                  # Playwright browser suite (see §4)
-containers/           # Dockerfile (prod), Dockerfile_debug (e2e), compose/, quadlet/
+containers/           # Dockerfile (prod), Dockerfile_debug (e2e), compose/, dokploy/, quadlet/
 res/                  # demo gif, icons, check_i18n.py, perf/gen scripts
 ```
 

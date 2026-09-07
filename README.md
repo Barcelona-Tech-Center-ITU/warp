@@ -114,7 +114,7 @@ WARP_DATABASE_PASSWORD=password
 
 For all configuration options — environment variables, secret key generation, language, and authentication providers (LDAP, Azure AD, OIDC, SAML) — see [CONFIGURATION.md](CONFIGURATION.md).
 
-For ready-to-use deployment examples (Docker Compose, Podman Quadlet with systemd) see [`containers/README.md`](containers/README.md).
+For ready-to-use deployment examples (Docker Compose, Dokploy, Podman Quadlet with systemd) see [`containers/README.md`](containers/README.md).
 
 # Development
 

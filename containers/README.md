@@ -15,6 +15,9 @@ containers/
     Caddyfile         — Caddy reverse-proxy config (static files + unix socket)
   compose/
     compose.yaml      — example deployment via Docker / Podman Compose
+  dokploy/
+    docker-compose.yml — deployment for Dokploy (app behind Dokploy's Traefik)
+    .env.example       — variables to paste into Dokploy's Environment tab
   quadlet/
     warp.pod                — Podman Quadlet: pod definition (network, ports)
     warp-shared.volume      — shared tmpfs volume (unix sockets + static files)
@@ -167,6 +170,81 @@ LDAP, …) or any other feature, add the relevant `WARP_*` variables under
 | `warp-app` image tag      | `:latest`           | A pinned version, e.g. `:v1.2.3`                                         |
 | `WARP_LANGUAGES`          | `["en","de","fr","es","pl"]` | JSON array of locale codes offered in the picker (`en`/`de`/`fr`/`es`/`pl`) |
 | `WARP_DEFAULT_LANGUAGE`   | `en`               | Fallback language (must be listed in `WARP_LANGUAGES`)                     |
+
+---
+
+## Dokploy
+
+[Dokploy](https://dokploy.com) is a self-hosted PaaS that deploys Docker Compose
+services from a git repository and fronts them with its own Traefik reverse
+proxy. `dokploy/docker-compose.yml` is a two-service deployment for it:
+
+| Service    | Image                | Role                                        |
+| ---------- | -------------------- | ------------------------------------------- |
+| `warp-db`  | `postgres:18-alpine` | PostgreSQL, reachable from the app only     |
+| `warp-app` | built from this repo | WARP application (uWSGI on TCP port `8080`) |
+
+There is **no Caddy container** here — Dokploy's Traefik terminates TLS and
+routes to the app, and uWSGI serves `/static` itself, so the shared-volume
+static/unix-socket arrangement of the compose and Quadlet setups is not needed.
+
+### Setup
+
+1. **Create the service.** In your Dokploy project: *Create Service → Compose*,
+   Compose Type **Docker Compose**. Select this repository and branch, and set
+   the **Compose Path** to `./containers/dokploy/docker-compose.yml`.
+
+2. **Set the environment.** Paste [`dokploy/.env.example`](dokploy/.env.example)
+   into the *Environment* tab and replace the two `change-me` values:
+   `WARP_SECRET_KEY` (generate with `openssl rand -hex 32`) and
+   `POSTGRES_PASSWORD`. Dokploy writes the tab into a `.env` file next to the
+   compose file; the app service loads it, so **any** `WARP_*` setting from
+   [CONFIGURATION.md](../CONFIGURATION.md) — auth backends, booking window,
+   reminders — can be added there without editing the compose file.
+
+3. **Add the domain.** *Domains* tab → service `warp-app`, port `8080`, and
+   enable HTTPS (Let's Encrypt). Dokploy injects the Traefik labels itself, so
+   the compose file needs none. Point an `A` record at the Dokploy host first.
+
+4. **Deploy.** The first deploy builds the image from `containers/Dockerfile`
+   (webpack + Python wheels, a few minutes; subsequent deploys reuse the layer
+   cache). On the empty database WARP creates the schema and the default
+   `admin` / `noneshallpass` account — **change that password immediately**.
+
+To deploy a published image instead of building on the host, delete the `build:`
+block in `dokploy/docker-compose.yml` and set an `image:` reference (the
+[`containers.yml`](../.github/workflows/containers.yml) workflow publishes
+`ghcr.io/<owner>/warp` for the repository it runs in).
+
+### Notes
+
+- **Database data** lives in the `warp-db-data` named volume, mounted at
+  `/var/lib/postgresql` as `postgres:18` requires — not the pre-18
+  `/var/lib/postgresql/data`, which would silently start an empty database on
+  every redeploy. Named (not bind-mounted) so Dokploy's *Volume Backups* can
+  back it up. The image is pinned to a major version on purpose: a major bump
+  needs a dump/restore.
+- **Login fails silently over plain http.** The compose file defaults
+  `WARP_SESSION_COOKIE_SECURE` to `true`, and browsers discard a `Secure` cookie
+  on an http origin, so the login form just returns to itself. Either enable
+  HTTPS on the domain or set `WARP_SESSION_COOKIE_SECURE=false` while testing
+  (e.g. on a `*.traefik.me` domain).
+- **Don't bind-mount repository files.** Dokploy re-clones the repository on
+  every deploy, so paths inside the checkout are wiped; use Dokploy's
+  *Advanced → Mounts* for extra files (a replacement `theme.css`, SAML IdP
+  metadata) and reference the mount path from the compose file.
+- **TLS-scheme-dependent URLs.** Traefik terminates TLS, so WARP itself sees
+  plain http. The auth backends have their own `*_HTTPS_SCHEME` settings
+  (default `https`, keep it), but iCal feed deep links are built from the scheme
+  WARP sees and come out as `http://` — they work through Traefik's http→https
+  redirect.
+
+The file is a plain compose file, so it can be validated without Dokploy:
+
+```sh
+cd containers/dokploy
+POSTGRES_PASSWORD=x WARP_SECRET_KEY=y docker compose config -q
+```
 
 ---
 
