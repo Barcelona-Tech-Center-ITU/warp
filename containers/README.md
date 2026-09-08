@@ -51,6 +51,11 @@ Build from the repository root:
 docker build -f containers/Dockerfile -t warp:latest .
 ```
 
+The only build argument is `ALPINE_IMAGE` (default `alpine:3.24`), the base for
+both stages. Point it at a mirror — e.g.
+`--build-arg ALPINE_IMAGE=public.ecr.aws/docker/library/alpine:3.24` — when the
+build host cannot pull from Docker Hub.
+
 Run (replace values as needed). Bind the HTTP endpoint to a TCP port so it is
 reachable without an in-pod proxy:
 
@@ -229,6 +234,14 @@ block in `dokploy/docker-compose.yml` and set an `image:` reference (the
   on an http origin, so the login form just returns to itself. Either enable
   HTTPS on the domain or set `WARP_SESSION_COOKIE_SECURE=false` while testing
   (e.g. on a `*.traefik.me` domain).
+- **If Docker Hub pulls fail on the host** — `received unexpected HTTP status:
+  500` or a rate limit — set `POSTGRES_IMAGE` and `ALPINE_IMAGE` in the
+  Environment tab to the ECR Public copies listed in `.env.example`. Both images
+  come from Docker Hub by default: `postgres` for the database and `alpine` as
+  the build base, so overriding only one leaves the deploy failing at the other
+  step. The alternative is a daemon-level pull-through mirror on the host
+  (`registry-mirrors` in `/etc/docker/daemon.json`), which fixes it for every
+  image but needs root on the host and a `systemctl reload docker`.
 - **Don't bind-mount repository files.** Dokploy re-clones the repository on
   every deploy, so paths inside the checkout are wiped; use Dokploy's
   *Advanced → Mounts* for extra files (a replacement `theme.css`, SAML IdP

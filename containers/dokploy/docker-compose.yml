@@ -16,7 +16,9 @@
 
 services:
   warp-db:
-    image: postgres:18-alpine
+    # Overridable because Docker Hub pulls fail on some hosts (500s, anonymous
+    # rate limits); see .env.example for a mirror that needs no daemon config.
+    image: ${POSTGRES_IMAGE:-postgres:18-alpine}
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-warp}
@@ -45,6 +47,9 @@ services:
     build:
       context: ../..
       dockerfile: containers/Dockerfile
+      args:
+        # Same reason as POSTGRES_IMAGE above: the build needs its Alpine base.
+        ALPINE_IMAGE: ${ALPINE_IMAGE:-alpine:3.24}
     restart: unless-stopped
     depends_on:
       warp-db:
