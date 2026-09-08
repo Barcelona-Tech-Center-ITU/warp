@@ -4,7 +4,7 @@
 # at this repository and set the Compose Path to
 #   ./containers/dokploy/docker-compose.yml
 # then paste .env.example into the Environment tab and add a domain in the
-# Domains tab (service warp-app, port 8080). See ../README.md#dokploy.
+# Domains tab (service warp-app, port 8080). Full guide: ./README.md.
 #
 # Differences from the generic ../compose/compose.yaml: no Caddy container —
 # Dokploy's own Traefik is the reverse proxy, so uWSGI listens on TCP 8080 and

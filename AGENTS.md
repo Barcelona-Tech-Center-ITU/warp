@@ -57,6 +57,7 @@ Version-controlled and authoritative — update them when behaviour changes
 | [AUTOBOOK.md](AUTOBOOK.md) | auto-book seat-picking heuristics — only relevant when changing the auto-book logic (`warp/xhr/plan.py`); no need to read it otherwise |
 | [e2e/README.md](e2e/README.md) | e2e harness, how to run, test accounts, writing conventions |
 | [containers/README.md](containers/README.md) | prod + debug images, compose, Podman Quadlet |
+| [containers/dokploy/README.md](containers/dokploy/README.md) | deploying on Dokploy (compose service, domain, env, troubleshooting) |
 
 `PLAN_*.md` and `graphify-out/` are gitignored local working documents;
 `CODE_REVIEW.md` is a working review log.
