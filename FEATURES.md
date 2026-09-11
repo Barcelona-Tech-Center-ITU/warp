@@ -137,6 +137,7 @@ The zone type influences what role a user effectively has:
 
 - **Non-admin users**: see "Bookings" plus only the **Plans** containing seats in zones they can access (plus public zones).
 - **Admins** see an additional **settings (gear) icon** dropdown in the top bar that contains two groups:
+  - **Reporting**: Capacity
   - **User management**: Users, Groups
   - **Plan management**: Zones, Plans
 - The right-side admin nav ("Report") remains; the old flat Users/Groups/Zones links were folded into the grouped dropdown.
@@ -480,6 +481,14 @@ The old "Already booked in another zone" section is gone; an existing booking on
 - Separate **From** and **To** date columns with date-picker filters.
 - Defaults: last 2 weeks of data, sorted by To (descending), then From (descending), then Login.
 - **Export to Excel** (`.xlsx`): generates an Excel file with timestamps formatted as dates. Limited to `MAX_REPORT_ROWS` (default: 5000) rows. A warning is shown if the selection exceeds the limit.
+
+### 11.3 Capacity Dashboard (Admin Only)
+- Reached from the admin menu ("Capacity"); one card per plan, ordered by plan name.
+- **Capacity** of a plan = its enabled seats that sit in a non-disabled zone.
+- For each day of the booking window (today through `WEEKS_IN_ADVANCE`, skipping `OMITTED_WEEKDAYS`) the card shows the **peak occupancy**: the highest number of seats booked at the same moment that day, as a bar plus the exact `booked / capacity (percent)` figure. Days are the plan's own local days, so plans in different timezones stay comparable.
+- The badge next to the plan name is the highest percentage across the whole window.
+- Percentages at or above `CAPACITY_WARN_THRESHOLD` (default 75%) are shown as busy; at or above `CAPACITY_ALERT_THRESHOLD` (default 90%) they are shown as an alert and listed in a banner at the top of the page, so an admin sees at a glance which plan runs out of seats and when.
+- Plans with no bookable seats show "No bookable seats on this plan" instead of the day list.
 
 ---
 

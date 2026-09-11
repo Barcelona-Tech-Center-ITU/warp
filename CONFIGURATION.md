@@ -69,6 +69,8 @@ environment:
 | `OMITTED_WEEKDAYS`           | `[]`         |    no    | Weekday numbers to grey out (0=Mon … 6=Sun)    |
 | `WEEK_START_DAY`             | `0`          |    no    | First column of the booking calendar (0=Mon … 6=Sun) |
 | `AUTOBOOK_USAGE_WINDOW_DAYS` | `30`         |    no    | Days window for auto-book seat ranking         |
+| `CAPACITY_WARN_THRESHOLD`    | `75`         |    no    | Occupancy % at which the capacity dashboard marks a day busy |
+| `CAPACITY_ALERT_THRESHOLD`   | `90`         |    no    | Occupancy % at which the capacity dashboard raises an alert |
 | `MIN_PASSWORD_LENGTH`        | `6`          |    no    | Minimum password length                        |
 | `LOGIN_IGNORECASE`           | `true`       |    no    | Match logins case-insensitively (all backends) |
 | `MAX_REPORT_ROWS`            | `5000`       |    no    | Maximum rows in Excel export                   |
@@ -320,6 +322,25 @@ independent of this system-wide window.
 | Variable                     | Default | Description                                                                                                  |
 | ---------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
 | `AUTOBOOK_USAGE_WINDOW_DAYS` | `30`    | Number of past days considered when ranking seats by personal booking frequency for the auto-book algorithm. |
+
+---
+
+## Capacity dashboard
+
+The admin-only **Capacity** view reports, for every plan and every day of the
+booking window, the peak number of simultaneously booked seats as a percentage
+of the plan's bookable seats (enabled seats in a non-disabled zone). These two
+thresholds decide how a day is flagged.
+
+| Variable                   | Default | Description                                                                                                             |
+| -------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `CAPACITY_WARN_THRESHOLD`  | `75`    | Occupancy percentage from which a day counts as busy (shown in the warning colour).                                      |
+| `CAPACITY_ALERT_THRESHOLD` | `90`    | Occupancy percentage from which a day counts as an alert: shown in the alert colour and listed in the banner at the top. |
+
+```sh
+WARP_CAPACITY_WARN_THRESHOLD=60    # flag days as busy earlier
+WARP_CAPACITY_ALERT_THRESHOLD=85
+```
 
 ---
 

@@ -30,6 +30,7 @@ const COVERED_ENDPOINTS: ReadonlySet<string> = new Set([
   '/',
   '/bookings',
   '/bookings/<string:report>',
+  '/capacity',
   '/groups',
   '/groups/assign/<group_login>',
   '/users',
@@ -39,6 +40,9 @@ const COVERED_ENDPOINTS: ReadonlySet<string> = new Set([
   '/plans/modify/<pid>',
   '/zones',
   '/zones/assign/<zid>',
+
+  // xhr — capacity dashboard
+  '/xhr/capacity/summary',
 
   // xhr — bookings
   '/xhr/bookings/list',

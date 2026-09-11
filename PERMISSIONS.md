@@ -58,6 +58,13 @@ Only site administrators can open **Users**, **Groups**, **Zones**, and
 **Plans** management, and the backend re-checks this on every related request —
 hiding a menu item is never the only line of defence.
 
+The **Capacity** dashboard (`/capacity` and its `/xhr/capacity/summary` data) is
+site-admin only for the same reason: it aggregates occupancy across *every*
+plan, including plans and zones the viewer has no access to. It is deliberately
+built so it could be opened to all users later — the numbers it reports are seat
+counts, never who booked what — which would mean relaxing those two guards (and
+deciding whether non-admins see all plans or only the ones they can book in).
+
 ---
 
 ## 3. Effective zone role = zone type ⊕ zone role
