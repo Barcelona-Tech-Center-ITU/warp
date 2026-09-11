@@ -3,6 +3,8 @@
 > **WARP** — Workspace Autonomous Reservation Program  
 > A hybrid-office desk (and parking) reservation system.  
 > This document describes everything a user, tester, or administrator can do in WARP.
+> WARP is the name of the codebase; the app presents itself to users as
+> **Giga Desk Booking** (browser title, installed-app name, logo lockup).
 
 The behaviour described here is covered by the end-to-end Playwright suite in
 [`e2e/`](e2e/) (see [`e2e/README.md`](e2e/README.md) for how to run it).

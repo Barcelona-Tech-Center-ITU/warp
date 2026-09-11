@@ -498,22 +498,27 @@ nav .lang-dropdown {
     height: 100%;
 }
 
-/* Nav-bar wordmark: an inline <svg><use href="logo.svg#wordmark"> whose path is
-   fill="currentColor", so it tints to whatever `color` we set — no coloured asset.
-   Used on every <nav> (app bar, login, ical, auth_error). The wrapper svg carries
-   the viewBox, so height:100% from the bar drives the width; padding keeps the old
-   10px breathing room. */
+/* Nav-bar logo: the white-knockout lockup, used on every <nav> (app bar, login,
+   ical, auth_error). The bar is brand-coloured in the light theme and near-black
+   in the dark one, so the white variant serves both. height:100% from the bar
+   drives the width; the padding is tighter than the old wordmark's 10px because
+   the lockup carries small type ("for every child") that turns to mush below
+   ~40px of bar height. */
 .logo {
     height: 100%;
-    padding: 10px;
+    width: auto;
+    padding: 6px 10px;
     box-sizing: border-box;
-    color: var(--warp-nav-logo-bg, #fff);
 }
-/* Same wordmark on the index splash, tinted with the brand primary. */
+/* Same lockup on the index splash, where the page background flips per theme:
+   the colour artwork on light, the white knockout on dark. */
 .logo-hero {
     width: 320px;
     max-width: 80vw;   /* viewport-relative: the parent div shrink-wraps to content, so % would resolve against the logo's own width and cap it below 320px */
-    color: var(--warp-primary);
+}
+:root[theme="dark"] .logo-on-light,
+:root:not([theme="dark"]) .logo-on-dark {
+    display: none;
 }
 
 .warp-container {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ resolved_lang }}" theme="light" data-theme-choice="auto">
 <head>
-    <title>WARP</title>
+    <title>Giga Desk Booking</title>
 
     {# Pre-paint, no flash: read the warp_theme cookie (light|dark|auto), resolve
        auto via prefers-color-scheme, stamp both attributes on <html>. Runs in
@@ -49,10 +49,10 @@
        (--warp-primary) — a single color, since Android bakes it in at install
        time with no light/dark mechanism. #}
     <link rel="manifest" href="{{ url_for('view.manifest') }}">
-    <meta name="theme-color" content="#2C3E50">
+    <meta name="theme-color" content="#1B3A6B">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.png') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="WARP">
+    <meta name="apple-mobile-web-app-title" content="Giga Desk">
     {# "default" (opaque status bar), NOT black-translucent: the SPA top bar
        has no env(safe-area-inset-top) handling, so an overlay status bar
        would put the clock/battery on top of the nav in standalone mode. #}

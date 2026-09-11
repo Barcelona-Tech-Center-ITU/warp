@@ -6,8 +6,13 @@ import * as bootstrap from '../app/bootstrap.js';
 export { html };
 
 export async function mount(ctx) {
-  var use = ctx.root.querySelector('#index-logo-use');
-  if (use) use.setAttribute('href', window.warpGlobals.URLs.logoSvg + '#wordmark');
+  // Two <img>s (CSS shows one per theme) because the logo is raster artwork:
+  // the colour lockup is invisible on the dark page, the white knockout on the
+  // light one. URLs come from warpGlobals so they follow the mount prefix.
+  var logo = ctx.root.querySelector('#index-logo');
+  if (logo) logo.src = window.warpGlobals.URLs.logo;
+  var logoDark = ctx.root.querySelector('#index-logo-dark');
+  if (logoDark) logoDark.src = window.warpGlobals.URLs.logoWhite;
 
   // Mirrors the old server-side "/" redirect (view.index): if the user has an
   // accessible default plan, go straight to it. data.plans is the accessible

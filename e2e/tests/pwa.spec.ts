@@ -13,7 +13,7 @@ test.describe('PWA install assets', () => {
     expect(resp.headers()['content-type']).toContain('application/manifest+json');
 
     const manifest = await resp.json();
-    expect(manifest.name).toBe('WARP');
+    expect(manifest.name).toBe('Giga Desk Booking');
     expect(manifest.display).toBe('standalone');
     expect(manifest.icons.length).toBeGreaterThan(0);
   });
