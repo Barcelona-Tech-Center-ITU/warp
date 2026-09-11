@@ -66,7 +66,8 @@ def spaURLs():
         'login': flask.url_for('auth.login'),
         'distBase': flask.url_for('static', filename='dist/'),
         'bootstrap': flask.url_for('xhr.bootstrap.bootstrap'),
-        'logoSvg': flask.url_for('static', filename='images/logo.svg'),
+        'logo': flask.url_for('static', filename='images/logo.png'),
+        'logoWhite': flask.url_for('static', filename='images/logo-white.png'),
 
         'planImage': flask.url_for('view.planImage', pid='__PID__'),
         'plan': flask.url_for('view.plan', pid='__PID__'),
@@ -224,15 +225,15 @@ def planModify(pid):
 def manifest():
     scope = flask.url_for('view.index')
     body = {
-        'name': 'WARP',
-        'short_name': 'WARP',
-        'description': 'WARP workspace autobooking, reservation platform',
+        'name': 'Giga Desk Booking',
+        'short_name': 'Giga Desk',
+        'description': 'Giga Desk Booking workspace autobooking, reservation platform',
         'start_url': scope,
         'scope': scope,
         'display': 'standalone',
         'lang': flask.current_app.config['DEFAULT_LANGUAGE'],
-        'background_color': '#2C3E50',
-        'theme_color': '#2C3E50',
+        'background_color': '#1B3A6B',
+        'theme_color': '#1B3A6B',
         'icons': [
             {
                 'src': flask.url_for('static', filename='images/icon-192.png'),

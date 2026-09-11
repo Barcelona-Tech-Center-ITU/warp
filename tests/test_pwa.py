@@ -95,7 +95,7 @@ def test_manifest_content(make_app):
     m = r.get_json(force=True)
     assert m['display'] == 'standalone'
     assert m['scope'] == '/' and m['start_url'] == '/'
-    assert m['background_color'] == m['theme_color'] == '#2C3E50'
+    assert m['background_color'] == m['theme_color'] == '#1B3A6B'
     sizes = {(i['sizes'], i['purpose']) for i in m['icons']}
     assert sizes == {('192x192', 'any'), ('512x512', 'any'), ('512x512', 'maskable')}
 

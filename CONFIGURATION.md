@@ -227,7 +227,16 @@ WARP_THEME_FILE=https://cdn.example.org/warp/theme.css
 The file is loaded after the base bundle, so it only needs to redefine the
 `--warp-*` tokens it wants to change (e.g. `--warp-primary`, `--warp-secondary`,
 `--warp-nav-bg`). See the comments in `warp/static/theme.css` for the full token
-list and which roles drive what.
+list and which roles drive what. The shipped theme is the Giga palette: primary
+`#1B3A6B`, secondary `#1E6BB8`.
+
+`THEME_FILE` covers colours only. The PWA manifest colours, the `theme-color`
+meta tag, the launcher icons and the iOS splash screens are baked into the
+build, so a runtime re-brand still installs with the stock Giga navy — changing
+those means editing `warp/view.py`, `warp/templates/base.html` and re-running
+`res/gen_pwa_assets.sh` (which fails loudly if the four hardcode sites drift
+apart). The logo itself is likewise a build-time asset; see
+[res/icons/README.md](res/icons/README.md).
 
 ---
 
