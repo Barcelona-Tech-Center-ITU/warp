@@ -111,6 +111,9 @@ def spaURLs():
         'plansZonesForPlan': flask.url_for('xhr.plans.zonesForPlan'),
         'plansAllZones': flask.url_for('xhr.plans.allZones'),
 
+        'capacity': flask.url_for('view.capacity'),
+        'capacitySummary': flask.url_for('xhr.capacity.summary'),
+
         'bookings': flask.url_for('view.bookings', report=''),
         'bookingsReportPage': flask.url_for('view.bookings', report='report'),
         'bookingsList': flask.url_for('xhr.bookings.list'),
@@ -195,6 +198,11 @@ def zones():
 
 @bp.route("/plans")
 def plans():
+    return _admin_spa()
+
+
+@bp.route("/capacity")
+def capacity():
     return _admin_spa()
 
 

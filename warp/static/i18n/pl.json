@@ -130,6 +130,14 @@
         "Password": "Hasło",
         "Bookings only": "Tylko rezerwacje",
         "Report": "Raport",
+        "Capacity": "Obłożenie",
+        "capacity": {
+            "PeakOccupancy": "Szczytowe obłożenie dziennie",
+            "Seats": "Miejsca do rezerwacji: %{count}",
+            "NoCapacity": "Brak miejsc do rezerwacji w tym planie",
+            "NoPlans": "Nie ma jeszcze żadnych planów",
+            "AlertsHeading": "Dni z obłożeniem co najmniej %{pct}%"
+        },
         "Users": "Użytkownicy",
         "Groups": "Grupy",
         "User name": "Nazwisko",

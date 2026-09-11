@@ -47,6 +47,11 @@ class DefaultSettings(object):
     # Same convention as OMITTED_WEEKDAYS (Python's tm_wday: 0=Mon..6=Sun).
     WEEK_START_DAY = 0
 
+    # Occupancy levels (percent of bookable seats) at which the capacity
+    # dashboard flags a day as busy / nearly full.
+    CAPACITY_WARN_THRESHOLD = 75
+    CAPACITY_ALERT_THRESHOLD = 90
+
     # opening and closing time in seconds from 00:00
     BOOK_OPEN = 0
     BOOK_CLOSE = 24 * 3600
@@ -254,6 +259,8 @@ _ENV_SETTINGS = {
     "AUTOBOOK_USAGE_WINDOW_DAYS": _fmt_int,
     "OMITTED_WEEKDAYS":           _fmt_json(_ARRAY_OF_WEEKDAYS),
     "WEEK_START_DAY":             _fmt_int,
+    "CAPACITY_WARN_THRESHOLD":    _fmt_int,
+    "CAPACITY_ALERT_THRESHOLD":   _fmt_int,
     "BOOK_OPEN":                  _fmt_int,
     "BOOK_CLOSE":                 _fmt_int,
     "MAX_CONTENT_LENGTH":         _fmt_int,

@@ -130,6 +130,14 @@
         "Password": "Passwort",
         "Bookings only": "Nur Buchungen",
         "Report": "Bericht",
+        "Capacity": "Auslastung",
+        "capacity": {
+            "PeakOccupancy": "Spitzenauslastung pro Tag",
+            "Seats": "%{count} buchbare Plätze",
+            "NoCapacity": "Keine buchbaren Plätze in diesem Plan",
+            "NoPlans": "Es gibt noch keine Pläne",
+            "AlertsHeading": "Tage ab %{pct}% Auslastung"
+        },
         "Users": "Benutzer",
         "Groups": "Gruppe",
         "User name": "Benutzername",

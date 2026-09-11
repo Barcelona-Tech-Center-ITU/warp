@@ -2463,3 +2463,85 @@ input[type=range]::-moz-range-track {
 :root[theme="dark"] #planmap .OMHint .seat_preview_title {
     background-color: var(--warp-surface);
 }
+
+/* ===== Capacity dashboard (admin view) =====
+   One card per plan; each day is a label + a proportional bar + the raw
+   peak/capacity figure. The three occupancy levels (ok / warn / alert) are the
+   only colour decision here and reuse existing semantic roles — the thresholds
+   themselves come from the server (CAPACITY_*_THRESHOLD). */
+.warp-capacity-title {
+    margin-bottom: var(--warp-space-4);
+}
+.warp-capacity-alerts {
+    border: 1px solid var(--warp-error);
+    border-radius: var(--warp-radius);
+    padding: var(--warp-space-3);
+    margin-bottom: var(--warp-space-4);
+}
+.warp-capacity-alerts-title {
+    color: var(--warp-error);
+    font-weight: 600;
+    margin-bottom: var(--warp-space-2);
+}
+.warp-capacity-alerts-list li {
+    display: flex;
+    gap: var(--warp-space-3);
+    line-height: 1.8;
+}
+.warp-capacity-alert-plan { font-weight: 600; }
+.warp-capacity-alert-pct { margin-left: auto; }
+
+.warp-capacity-card-head {
+    display: flex;
+    align-items: center;
+    gap: var(--warp-space-3);
+}
+.warp-capacity-plan-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.warp-capacity-badge {
+    margin-left: auto;
+    border-radius: var(--warp-radius-pill);
+    padding: 0 var(--warp-space-3);
+    color: var(--warp-on-brand);
+    line-height: 1.9;
+}
+.warp-capacity-sub {
+    color: var(--warp-grey-text);
+    margin: var(--warp-space-2) 0 var(--warp-space-3);
+}
+.warp-capacity-day {
+    display: flex;
+    align-items: center;
+    gap: var(--warp-space-3);
+    line-height: 2;
+}
+.warp-capacity-day-label {
+    flex: 0 0 7em;
+    color: var(--warp-grey-text);
+}
+.warp-capacity-day-value {
+    flex: 0 0 9em;
+    text-align: right;
+}
+.warp-capacity-bar {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 10px;
+    border-radius: var(--warp-radius-pill);
+    background: var(--warp-grey-bg);
+    overflow: hidden;
+}
+.warp-capacity-bar-fill {
+    display: block;
+    height: 100%;
+}
+.warp-capacity-empty {
+    color: var(--warp-grey-text);
+}
+
+.warp-capacity-ok    { background-color: var(--warp-success); }
+.warp-capacity-warn  { background-color: var(--warp-secondary); }
+.warp-capacity-alert { background-color: var(--warp-error); }
+.warp-capacity-none  { background-color: var(--warp-grey-muted); }

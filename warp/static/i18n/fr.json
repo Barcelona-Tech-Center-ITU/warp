@@ -130,6 +130,14 @@
         "Password": "Mot de passe",
         "Bookings only": "Réservations seulement",
         "Report": "Rapport",
+        "Capacity": "Capacité",
+        "capacity": {
+            "PeakOccupancy": "Occupation maximale par jour",
+            "Seats": "%{count} places réservables",
+            "NoCapacity": "Aucune place réservable sur ce plan",
+            "NoPlans": "Il n'y a pas encore de plan",
+            "AlertsHeading": "Jours atteignant %{pct}% d'occupation"
+        },
         "Users": "Utilisateurs",
         "Groups": "Groupes",
         "User name": "Nom d'utilisateur",

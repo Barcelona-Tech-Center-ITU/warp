@@ -9,6 +9,7 @@ from . import plans
 from . import prefs
 from . import calendar
 from . import bootstrap
+from . import capacity
 
 bp = flask.Blueprint('xhr', __name__)
 
@@ -21,3 +22,4 @@ bp.register_blueprint(plans.bp)
 bp.register_blueprint(prefs.bp)
 bp.register_blueprint(calendar.bp)
 bp.register_blueprint(bootstrap.bp)
+bp.register_blueprint(capacity.bp)
