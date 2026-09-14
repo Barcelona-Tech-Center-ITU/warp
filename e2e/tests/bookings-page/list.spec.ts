@@ -6,7 +6,7 @@ import { logIn } from '../../helpers/auth';
 import { USER1, USER2, USER3 } from '../../helpers/users';
 import { querySql } from '../../helpers/db';
 import { futureDayTs, getZoneSeats } from '../../helpers/booking';
-import { insertBooking, clearDefaultUserFilter } from '../../helpers/bookings-page';
+import { insertBooking } from '../../helpers/bookings-page';
 
 test.describe('bookings list visibility', () => {
 
@@ -51,7 +51,6 @@ test.describe('bookings list visibility', () => {
     await logIn(page, USER2);
     await page.goto('/bookings');
     await page.waitForLoadState('networkidle');
-    await clearDefaultUserFilter(page);
     await expect(page.locator('.tabulator-row')).toHaveCount(2);
   });
 
@@ -122,7 +121,6 @@ test.describe('bookings list visibility', () => {
     await logIn(page, USER2);
     await page.goto('/bookings');
     await page.waitForLoadState('networkidle');
-    await clearDefaultUserFilter(page);
 
     const user1Row = page.locator('.tabulator-row', { hasText: 'Foo' });
     await expect(user1Row.locator('.material-icons.warp-icon-danger')).toHaveCount(0);
@@ -135,7 +133,6 @@ test.describe('bookings list visibility', () => {
     await logIn(page, USER1);
     await page.goto('/bookings');
     await page.waitForLoadState('networkidle');
-    await clearDefaultUserFilter(page);
     await expect(page.locator('.tabulator-row').first()).toBeVisible();
     await expect(
       page.locator('.tabulator-row').first().locator('.material-icons.warp-icon-danger'),
@@ -222,7 +219,6 @@ test.describe('delete booking from the bookings page', () => {
     await logIn(page, USER1);
     await page.goto('/bookings');
     await page.waitForLoadState('networkidle');
-    await clearDefaultUserFilter(page);
     await page.locator('.tabulator-row').first().locator('.material-icons.warp-icon-danger').click();
 
     const modal = page.locator('.modal', { hasText: 'Are you sure to release this booking?' });

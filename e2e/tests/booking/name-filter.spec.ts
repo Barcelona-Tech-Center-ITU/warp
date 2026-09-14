@@ -1,9 +1,6 @@
 /**
- * Bookings page "User name" header filter:
- *   - defaults to the logged-in user's own bookings via an EXACT login match
- *     (the box is pre-filled with their name);
- *   - ANY edit flips it to the regular starts-with name filter;
- *   - clearing the box = empty name filter = show everyone.
+ * Bookings page "User name" header filter starts empty (all visible
+ * bookings) and uses a regular starts-with match once the user types.
  */
 import { test, expect } from '../../fixtures';
 import { logIn } from '../../helpers/auth';
@@ -13,7 +10,7 @@ import { getZoneSeats, futureDayTs } from '../../helpers/booking';
 import { fillHeaderFilter } from '../../helpers/bookings-page';
 
 test.describe('bookings page name filter', () => {
-  test('defaults to my bookings, flips to starts-with on any edit', async ({ page }) => {
+  test('starts empty showing everyone, then starts-with on type', async ({ page }) => {
     const seats = await getZoneSeats(1);
     const ts = futureDayTs(1);
     // Two future bookings in the shared Zone 1 by two different users.
@@ -33,18 +30,18 @@ test.describe('bookings page name filter', () => {
     const row = (i: number) =>
       page.locator('.tabulator-row', { hasText: seats[i].name });
 
-    // Default: box shows the user's name; filter is exact-login -> only my booking.
-    await expect(nameInput).toHaveValue(USER1.name);
+    // Default: empty box, no user filter → both bookings visible.
+    await expect(nameInput).toHaveValue('');
     await expect(row(0)).toBeVisible();
-    await expect(row(1)).toHaveCount(0);
+    await expect(row(1)).toBeVisible();
 
-    // Typing "B" flips to starts-with on the visible name: matches user2
+    // Typing "B" is starts-with on the visible name: matches user2
     // ("Bar"), not user1 ("Foo").
     await fillHeaderFilter(page, 'user_name', 'B');
     await expect(row(1)).toBeVisible();
     await expect(row(0)).toHaveCount(0);
 
-    // Clearing flips to the regular empty filter = show everyone.
+    // Clearing restores everyone.
     await fillHeaderFilter(page, 'user_name', '');
     await expect(row(0)).toBeVisible();
     await expect(row(1)).toBeVisible();
