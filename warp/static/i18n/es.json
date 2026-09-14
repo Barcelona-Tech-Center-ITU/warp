@@ -141,7 +141,6 @@
             "AlertsHeading": "Días que alcanzan el %{pct}% de ocupación"
         },
         "home": {
-            "Intro": "Con WARP reservas un puesto de trabajo o una plaza de aparcamiento en la oficina. Todo ocurre sobre un plano: el mapa de una planta o de un aparcamiento, con un icono por puesto.",
             "OpenDefaultPlan": "Abrir %{plan}",
             "HowToTitle": "Reservar un puesto",
             "Step1": "Elige un plano en el menú de la parte superior de la página.",

@@ -141,7 +141,6 @@
             "AlertsHeading": "Tage ab %{pct}% Auslastung"
         },
         "home": {
-            "Intro": "Mit WARP reservieren Sie einen Arbeitsplatz oder einen Parkplatz im Büro. Alles geschieht auf einem Plan: der Karte einer Etage oder eines Parkhauses, mit einem Symbol pro Platz.",
             "OpenDefaultPlan": "%{plan} öffnen",
             "HowToTitle": "Einen Platz buchen",
             "Step1": "Wählen Sie oben im Menü einen Plan aus.",

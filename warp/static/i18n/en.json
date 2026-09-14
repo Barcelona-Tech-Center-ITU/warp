@@ -141,7 +141,6 @@
             "AlertsHeading": "Days reaching %{pct}% occupancy"
         },
         "home": {
-            "Intro": "WARP is how you reserve a desk or a parking space in the office. Everything happens on a plan: a map of a floor or a car park, with one icon per seat.",
             "OpenDefaultPlan": "Open %{plan}",
             "HowToTitle": "Booking a seat",
             "Step1": "Pick a plan from the menu at the top of the page.",

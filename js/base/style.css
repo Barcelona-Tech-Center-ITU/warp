@@ -589,14 +589,7 @@ nav .lang-dropdown {
 .index_hero IMG {
     max-width: 70%;
     height: auto;
-}
-.index_tagline {
-    color: var(--warp-grey-text);
-    margin-top: var(--warp-space-2);
-}
-.index_intro {
-    max-width: 46em;
-    margin: var(--warp-space-4) auto;
+    margin-bottom: var(--warp-space-4);
 }
 .index_steps {
     padding-left: var(--warp-space-5);

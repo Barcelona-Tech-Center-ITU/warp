@@ -141,7 +141,6 @@
             "AlertsHeading": "Jours atteignant %{pct}% d'occupation"
         },
         "home": {
-            "Intro": "WARP vous permet de réserver un bureau ou une place de parking. Tout se passe sur un plan : la carte d'un étage ou d'un parking, avec une icône par place.",
             "OpenDefaultPlan": "Ouvrir %{plan}",
             "HowToTitle": "Réserver une place",
             "Step1": "Choisissez un plan dans le menu en haut de la page.",

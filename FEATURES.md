@@ -145,7 +145,7 @@ The zone type influences what role a user effectively has:
 
 ### 2.5 Landing Page
 
-- `/` is a short introduction to the tool: what a plan is, the four steps to book a seat, what the Bookings list is for, and what the Capacity dashboard tells you (with a link to it).
+- `/` is a short introduction to the tool: the four steps to book a seat, what the Bookings list is for, and what the Capacity dashboard tells you (with a link to it).
 - Every user lands here after login; it is also reachable at any time via the logo.
 - If the user has a **default plan** set, an "Open _plan name_" button appears on the page as a shortcut (see §14.1).
 

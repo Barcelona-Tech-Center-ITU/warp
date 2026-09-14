@@ -78,7 +78,7 @@ test.describe('mobile sidenav', () => {
     await page.locator('#mobile-nav a', { hasText: 'Home' }).click();
     await waitForViewReady(page, 'index');
     await expect(page.locator('#mobile-nav')).not.toBeInViewport();
-    await expect(page.locator('.index_container')).toBeVisible();
+    await expect(page.locator('.index_home')).toBeVisible();
   });
 
 });

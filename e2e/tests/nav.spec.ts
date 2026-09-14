@@ -23,10 +23,8 @@ test.describe('desktop Home nav', () => {
 
     await page.locator('#nav-home a', { hasText: 'Home' }).click();
     await waitForViewReady(page, 'index');
-    await expect(page.locator('.index_container')).toBeVisible();
-    await expect(page.locator('.index_container')).toContainText(
-      'Workspace Autonomous Reservation Program',
-    );
+    await expect(page.locator('.index_home')).toBeVisible();
+    await expect(page.locator('.index_home')).toContainText('Booking a seat');
   });
 
   test('Home is the active nav item on the landing page', async ({ page }) => {
