@@ -468,7 +468,7 @@ The old "Already booked in another zone" section is gone; an existing booking on
 - Shows **future** bookings in zones the user is assigned to, plus the user's own future bookings in zones they no longer have access to (so they can still release them — the plan map can't reach a seat in a zone they can't open).
 - Columns: User name, Plan, Seat, Time (merged from/to into one column).
 - A **delete button** (🗑) appears for any of the user's **own** bookings (regardless of their role in that zone — viewers and users who have lost access can still release their own), plus any booking in a zone where they have **Zone Admin** role.
-- Filtering by user name, plan, seat, and date range.
+- Filtering by user name, plan, seat, and date range. The user-name filter starts empty, so every visible booking is listed; type a name to narrow the list.
 - Sorting by time and user name.
 - Paginated with remote data loading.
 

@@ -194,48 +194,8 @@ export async function mount(ctx) {
         });
     }
 
-    // Custom header filter for "User name" (non-report view only):
-    //   - defaults to the logged-in user's own bookings via an EXACT login
-    //     match (immune to name-prefix collisions like "User 1" vs "User 10"),
-    //     with the login shown in the box; the login filter is applied here at
-    //     column init (before the first data load), so the first request is
-    //     already filtered (no unfiltered flash / double load);
-    //   - ANY edit the user makes (including clearing) flips it to the regular
-    //     starts-with name filter; an empty box then shows everyone.
-    var userNameFilterEditor = function(cell, onRendered, success, cancel, editorParams) {
-        var myLogin = window.warpGlobals['login'] || "";
-        var myName = window.warpGlobals['userName'] || "";
-
-        var container = document.createElement("span");
-        var input = container.appendChild(document.createElement("input"));
-        input.type = "search";
-        input.style.width = "100%";
-        input.style.boxSizing = "border-box";
-
-        var v = cell.getValue();
-        var inNameMode = (v && typeof v === "object" && typeof v.name === "string");
-        input.value = inNameMode ? v.name : (myName || myLogin);
-
-        onRendered(function() {
-            if (myLogin && !inNameMode) {
-                success({ login: myLogin });
-            }
-            var submit = function() { success({ name: input.value }); };
-            input.addEventListener("input", submit);
-            input.addEventListener("search", submit);
-        });
-
-        return container;
-    };
-
-    var userNameColumn = report
-        ? {title:TR("User name"), field:"user_name", headerFilter:"input", headerFilterFunc:"starts"}
-        : {title:TR("User name"), field:"user_name",
-           headerFilter:userNameFilterEditor, headerFilterFunc:function(){},
-           headerFilterLiveFilter:false};
-
     var columns = [
-        userNameColumn,
+        {title:TR("User name"), field:"user_name", headerFilter:"input", headerFilterFunc:"starts"},
         {title:TR("Plan"), field: "plan_name", headerFilter:"input", headerFilterFunc:"starts"},
         {title:TR("Seat"), field: "seat_name", headerFilter:"input", headerFilterFunc:"starts"}
     ];

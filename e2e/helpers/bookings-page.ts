@@ -49,16 +49,6 @@ export async function fillHeaderFilter(
   await page.waitForLoadState('networkidle');
 }
 
-/**
- * The bookings page defaults the "User name" header filter to the logged-in
- * user's own login, so it initially shows only their own bookings. Call this
- * after navigating to /bookings when a test needs to see bookings from other
- * users.
- */
-export async function clearDefaultUserFilter(page: Page): Promise<void> {
-  await fillHeaderFilter(page, 'user_name', '');
-}
-
 /** Click a Tabulator column header to toggle sort and wait for the remote sort POST. */
 export async function clickColumnHeader(
   page: Page,
