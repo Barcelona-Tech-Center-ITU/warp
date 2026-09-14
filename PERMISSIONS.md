@@ -59,11 +59,11 @@ Only site administrators can open **Users**, **Groups**, **Zones**, and
 hiding a menu item is never the only line of defence.
 
 The **Capacity** dashboard (`/capacity` and its `/xhr/capacity/summary` data) is
-site-admin only for the same reason: it aggregates occupancy across *every*
-plan, including plans and zones the viewer has no access to. It is deliberately
-built so it could be opened to all users later — the numbers it reports are seat
-counts, never who booked what — which would mean relaxing those two guards (and
-deciding whether non-admins see all plans or only the ones they can book in).
+open to every signed-in user, because it reports seat counts only — never who
+booked what. What it *scopes* is which seats are counted: a regular user sees
+only plans that contain a zone they hold an effective role in, and the
+occupancy is computed from those zones alone (`user_to_zone_roles`, the same
+view the nav plan links use). A site admin sees every plan and every seat.
 
 ---
 

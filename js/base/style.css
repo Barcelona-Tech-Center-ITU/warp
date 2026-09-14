@@ -577,6 +577,35 @@ nav .lang-dropdown {
     height: auto;
 }
 
+/* Landing page: logo hero + a short "how to use WARP" explanation. #view-root
+   clips its overflow (see above), so the page scrolls inside its own container. */
+.index_home {
+    overflow-y: auto;
+}
+.index_hero {
+    text-align: center;
+    padding-top: var(--warp-space-5);
+}
+.index_hero IMG {
+    max-width: 70%;
+    height: auto;
+}
+.index_tagline {
+    color: var(--warp-grey-text);
+    margin-top: var(--warp-space-2);
+}
+.index_intro {
+    max-width: 46em;
+    margin: var(--warp-space-4) auto;
+}
+.index_steps {
+    padding-left: var(--warp-space-5);
+}
+.index_steps li {
+    list-style: decimal;
+    margin-bottom: var(--warp-space-2);
+}
+
 /* Client-side error view (app/router.js renderErrorView): a plan/assign deep
    link whose context XHR returned 403/404, a server-down network failure, or
    an unmatched SPA route. Centred like the index splash so it reads as a
@@ -2469,6 +2498,9 @@ input[type=range]::-moz-range-track {
    peak/capacity figure. The three occupancy levels (ok / warn / alert) are the
    only colour decision here and reuse existing semantic roles — the thresholds
    themselves come from the server (CAPACITY_*_THRESHOLD). */
+.warp-capacity {
+    overflow-y: auto;   /* #view-root clips; the card list scrolls inside it */
+}
 .warp-capacity-title {
     margin-bottom: var(--warp-space-4);
 }

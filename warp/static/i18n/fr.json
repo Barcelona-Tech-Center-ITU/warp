@@ -138,6 +138,19 @@
             "NoPlans": "Il n'y a pas encore de plan",
             "AlertsHeading": "Jours atteignant %{pct}% d'occupation"
         },
+        "home": {
+            "Intro": "WARP vous permet de réserver un bureau ou une place de parking. Tout se passe sur un plan : la carte d'un étage ou d'un parking, avec une icône par place.",
+            "OpenDefaultPlan": "Ouvrir %{plan}",
+            "HowToTitle": "Réserver une place",
+            "Step1": "Choisissez un plan dans le menu en haut de la page.",
+            "Step2": "Sélectionnez les jours souhaités dans le calendrier et ajustez les horaires.",
+            "Step3": "Cliquez sur une place libre pour la réserver. Cliquez sur votre propre place pour modifier les horaires ou la libérer.",
+            "Step4": "Pressé ? Le bouton + réserve pour vous la meilleure place disponible.",
+            "BookingsHint": "Réservations liste tout ce que vous avez réservé et permet de libérer une place dont vous n'avez plus besoin.",
+            "CapacityTitle": "Le bureau est-il chargé ?",
+            "CapacityText": "Le tableau de bord d'occupation indique, pour chaque plan et chaque jour réservable, combien de places sont prises au moment le plus chargé de la journée. Utilisez-le pour choisir un jour plus calme ou pour voir quand un étage arrive à saturation : les jours chargés sont mis en évidence et les jours les plus remplis apparaissent en haut.",
+            "OpenCapacity": "Ouvrir le tableau de bord d'occupation"
+        },
         "Users": "Utilisateurs",
         "Groups": "Groupes",
         "User name": "Nom d'utilisateur",

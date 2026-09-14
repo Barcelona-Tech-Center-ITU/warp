@@ -51,7 +51,6 @@
                     <div class="collapsible-body">
                         <ul>
                             <li><a href="{{ url_for('view.bookings', report='report') }}" class="TR">Report</a></li>
-                            <li><a href="{{ url_for('view.capacity') }}" class="TR">Capacity</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ url_for('view.users') }}" class="TR">Users</a></li>
                             <li><a href="{{ url_for('view.groups') }}" class="TR">Groups</a></li>
@@ -327,8 +326,6 @@
     </ul>
 
     <ul id="admin_menu_dropdown" class="dropdown-content">
-        <li><a href="{{ url_for('view.capacity') }}" class="TR">Capacity</a></li>
-        <li class="divider" tabindex="-1"></li>
         <li><a href="{{ url_for('view.users') }}" class="TR">Users</a></li>
         <li><a href="{{ url_for('view.groups') }}" class="TR">Groups</a></li>
         <li class="divider" tabindex="-1"></li>
