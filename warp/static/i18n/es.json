@@ -132,6 +132,27 @@
         "Home": "Inicio",
         "Bookings": "Reservas",
         "Report": "Reporte",
+        "Capacity": "Capacidad",
+        "capacity": {
+            "PeakOccupancy": "Ocupación máxima por día",
+            "Seats": "%{count} asientos reservables",
+            "NoCapacity": "No hay asientos reservables en este plano",
+            "NoPlans": "Todavía no hay planos",
+            "AlertsHeading": "Días que alcanzan el %{pct}% de ocupación"
+        },
+        "home": {
+            "Intro": "Con WARP reservas un puesto de trabajo o una plaza de aparcamiento en la oficina. Todo ocurre sobre un plano: el mapa de una planta o de un aparcamiento, con un icono por puesto.",
+            "OpenDefaultPlan": "Abrir %{plan}",
+            "HowToTitle": "Reservar un puesto",
+            "Step1": "Elige un plano en el menú de la parte superior de la página.",
+            "Step2": "Selecciona en el calendario los días que necesitas y ajusta las horas.",
+            "Step3": "Haz clic en un puesto libre para reservarlo. Haz clic en tu propio puesto para cambiar las horas o liberarlo.",
+            "Step4": "¿Con prisa? El botón + reserva por ti el mejor puesto disponible.",
+            "BookingsHint": "Reservas muestra todo lo que has reservado y permite liberar un puesto que ya no necesitas.",
+            "CapacityTitle": "¿Qué tan llena está la oficina?",
+            "CapacityText": "El panel de capacidad muestra, para cada plano y cada día reservable, cuántos puestos están ocupados en el momento de mayor ocupación del día. Úsalo para elegir un día más tranquilo o para ver cuándo una planta se queda sin puestos: los días cargados se resaltan y los más llenos aparecen arriba.",
+            "OpenCapacity": "Abrir el panel de capacidad"
+        },
         "Users": "Usuarios",
         "Groups": "Grupos",
         "User name": "Nombre del Usuario",

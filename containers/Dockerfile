@@ -1,4 +1,8 @@
-FROM alpine:3.24 AS builder
+# Base image for both stages. Overridable so a host that cannot reach Docker Hub
+# can build from a mirror, e.g. public.ecr.aws/docker/library/alpine:3.24.
+ARG ALPINE_IMAGE=alpine:3.24
+
+FROM ${ALPINE_IMAGE} AS builder
 
 RUN apk add nodejs npm python3 py3-pip
 
@@ -27,7 +31,7 @@ COPY warp/ warp/
 RUN pip wheel -w wheel --no-deps .
 
 ###########################################
-FROM alpine:3.24
+FROM ${ALPINE_IMAGE}
 
 ENV WARPAPP_UID=200
 ENV WARPAPP_GID=200

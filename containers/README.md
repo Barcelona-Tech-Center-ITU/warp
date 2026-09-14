@@ -15,6 +15,10 @@ containers/
     Caddyfile         — Caddy reverse-proxy config (static files + unix socket)
   compose/
     compose.yaml      — example deployment via Docker / Podman Compose
+  dokploy/
+    README.md          — Dokploy deployment guide
+    docker-compose.yml — deployment for Dokploy (app behind Dokploy's Traefik)
+    .env.example       — variables to paste into Dokploy's Environment tab
   quadlet/
     warp.pod                — Podman Quadlet: pod definition (network, ports)
     warp-shared.volume      — shared tmpfs volume (unix sockets + static files)
@@ -47,6 +51,11 @@ Build from the repository root:
 ```sh
 docker build -f containers/Dockerfile -t warp:latest .
 ```
+
+The only build argument is `ALPINE_IMAGE` (default `alpine:3.24`), the base for
+both stages. Point it at a mirror — e.g.
+`--build-arg ALPINE_IMAGE=public.ecr.aws/docker/library/alpine:3.24` — when the
+build host cannot pull from Docker Hub.
 
 Run (replace values as needed). Bind the HTTP endpoint to a TCP port so it is
 reachable without an in-pod proxy:
@@ -167,6 +176,27 @@ LDAP, …) or any other feature, add the relevant `WARP_*` variables under
 | `warp-app` image tag      | `:latest`           | A pinned version, e.g. `:v1.2.3`                                         |
 | `WARP_LANGUAGES`          | `["en","de","fr","es","pl"]` | JSON array of locale codes offered in the picker (`en`/`de`/`fr`/`es`/`pl`) |
 | `WARP_DEFAULT_LANGUAGE`   | `en`               | Fallback language (must be listed in `WARP_LANGUAGES`)                     |
+
+---
+
+## Dokploy
+
+[Dokploy](https://dokploy.com) is a self-hosted PaaS that deploys Docker Compose
+services from a git repository and fronts them with its own Traefik reverse
+proxy. `dokploy/docker-compose.yml` is a two-service deployment for it:
+
+| Service    | Image                | Role                                        |
+| ---------- | -------------------- | ------------------------------------------- |
+| `warp-db`  | `postgres:18-alpine` | PostgreSQL, reachable from the app only     |
+| `warp-app` | built from this repo | WARP application (uWSGI on TCP port `8080`) |
+
+There is **no Caddy container** here — Dokploy's Traefik terminates TLS and
+routes to the app, and uWSGI serves `/static` itself, so the shared-volume
+static/unix-socket arrangement of the compose and Quadlet setups is not needed.
+
+**[`dokploy/README.md`](dokploy/README.md) is the full guide**: prerequisites,
+the four setup steps (service, environment, domain, deploy), backups, variants
+(published image, external PostgreSQL) and troubleshooting.
 
 ---
 

@@ -15,13 +15,13 @@
  *     roles* + *channels* below; brand tints re-mix against the new surface
  *     automatically. Nothing in the app needs to change.
  *
- * Brand is WARP's business palette: primary = charcoal slate (#2C3E50),
- * secondary = blue (#2980B9).
+ * Brand is the Giga palette: primary = deep navy (#1B3A6B), secondary = blue
+ * (#1E6BB8).
  */
 :root {
   /* ===== BRAND — the only knobs to change for a re-brand ================== */
-  --warp-primary:   #2C3E50;  /* charcoal slate — nav, buttons, focus, links, primary actions */
-  --warp-secondary: #2980B9;  /* blue — FAB, tabs, selected rows, default btn, accents */
+  --warp-primary:   #1B3A6B;  /* deep navy — nav, buttons, focus, links, primary actions */
+  --warp-secondary: #1E6BB8;  /* blue — FAB, tabs, selected rows, default btn, accents */
 
   /* Top-bar fill — a single themeable slot: a solid colour, a gradient, or a
      url() image. The bundle applies it via `background: var(--warp-nav-bg,
@@ -29,7 +29,6 @@
      drop in a gradient or url() image here to re-skin the bar via theme.css
      alone (e.g. `linear-gradient(90deg, #b2325d, #3B2550)`), no rebuild. */
   --warp-nav-bg: var(--warp-primary);
-  --warp-nav-logo-bg: #ffffff;  /* WARP wordmark fill on the nav bar (logo.svg via <use>, tinted by `color`) — white reads on the brand bar in both themes */
 
   /* Brand tints, derived so a re-brand recolours them. Background tints mix
      against --warp-surface so they flip for free in dark mode; accent fills mix
@@ -42,7 +41,7 @@
 
   /* ===== SEMANTIC ROLES ================================================== */
   --warp-error:    #c62828;  /* deep red — delete/danger button + icon (AA-safe with white text) */
-  --warp-success:  #2e7d32;  /* green — seat status "free/available" ONLY */
+  --warp-success:  #2e7d32;  /* green — seat status "free/available" + capacity dashboard "below threshold" */
   --warp-edit:     var(--warp-secondary);  /* edit/manage icons; retarget if secondary is wrong for an icon */
   --warp-on-brand: #ffffff;  /* text/icons ON a brand-coloured fill (buttons, headers, titles) — stays light in dark mode */
 
@@ -55,7 +54,7 @@
      the rings/arrows over it). */
   --warp-seat-available-fg:   #2e7d32;  /* green — free / available seat */
   --warp-seat-available-bg:   color-mix(in srgb, var(--warp-seat-available-fg), white 80%);
-  --warp-seat-yours-fg:       #2C3E50;  /* charcoal slate — your / assigned seat */
+  --warp-seat-yours-fg:       #1B3A6B;  /* deep navy — your / assigned seat */
   --warp-seat-yours-bg:       color-mix(in srgb, var(--warp-seat-yours-fg), white 80%);
   --warp-seat-unavailable-fg: #616161;  /* grey — unavailable / booked / boss seat */
   --warp-seat-unavailable-bg:  color-mix(in srgb, var(--warp-seat-unavailable-fg), white 80%);
@@ -70,8 +69,8 @@
 
   /* ===== CHANNELS — "r, g, b" for rgba(var(--…), α); a dark theme flips the
      neutral channels (shadow→light glow, surface→dark) ==================== */
-  --warp-primary-rgb:   44, 62, 80;
-  --warp-secondary-rgb: 41, 128, 185;
+  --warp-primary-rgb:   27, 58, 107;
+  --warp-secondary-rgb: 30, 107, 184;
   --warp-error-rgb:     198, 40, 40;
   --warp-surface-rgb:   255, 255, 255;  /* translucent surface overlays (loaders, dimmed numerals) */
   --warp-shadow-rgb:    0, 0, 0;        /* drop shadows */
@@ -80,13 +79,13 @@
 /* ===========================================================================
  * DARK THEME — activated by <html theme="dark"> (set from the warp_theme cookie).
  * Overrides only the neutral roles, the two neutral channels, and the brand
- * primary (the charcoal is too dark to read on a dark surface, so it lightens to
- * a steel-blue). Brand tints re-mix against the new --warp-surface automatically;
+ * primary (the navy is too dark to read on a dark surface, so it lightens to a
+ * mid-blue). Brand tints re-mix against the new --warp-surface automatically;
  * --warp-secondary / --warp-error / --warp-success / --warp-on-brand are
  * unchanged (they read fine on dark). Tune these values to taste.
  * =========================================================================== */
 :root[theme="dark"] {
-  --warp-primary:      #5C7A99;  /* lightened charcoal so nav/buttons/focus read on dark */
+  --warp-primary:      #5C86C4;  /* lightened navy so nav/buttons/focus read on dark */
   --warp-primary-dark: color-mix(in srgb, var(--warp-primary), white 22%);  /* links lighten on dark */
 
   /* Top-bar fill on a dark page — page tier so the bar blends with the body

@@ -6,20 +6,20 @@
 # iPhone screen size (see SPLASH_SIZES below; an unmatched device silently gets
 # a plain white splash, nothing breaks).
 #
-# Requires: rsvg-convert (librsvg), magick (ImageMagick 7).
+# Requires: magick (ImageMagick 7).
 #
-# The master (res/icons/logo_sq.svg) is the WARP W mark drawn with currentColor;
-# it is rendered white — matching --warp-nav-logo-bg, the wordmark color on the
-# landing page nav bar — and composited onto the brand primary #2C3E50
-# (--warp-primary), the background_color/theme_color in the manifest.
+# The master (res/icons/logo_sq.png) is the giga bird cropped out of the logo
+# lockup, blue artwork on transparent; it is recolored white and composited onto
+# the brand primary #1B3A6B (--warp-primary), the background_color/theme_color
+# in the manifest.
 
 set -eu
 
-BG='#2C3E50'
+BG='#1B3A6B'
 FG='#ffffff'
 
 RES_DIR="$(cd "$(dirname "$0")" && pwd)"
-SRC="$RES_DIR/icons/logo_sq.svg"
+SRC="$RES_DIR/icons/logo_sq.png"
 IMG_DIR="$RES_DIR/../warp/static/images"
 SPLASH_DIR="$IMG_DIR/splash"
 TMP="$(mktemp -d)"
@@ -27,24 +27,24 @@ trap 'rm -rf "$TMP"' EXIT
 
 mkdir -p "$SPLASH_DIR"
 
-# Bake the foreground color in (the SVG uses currentColor, which rasterizers
-# would render black).
-sed "s/currentColor/$FG/g" "$SRC" > "$TMP/logo.svg"
+# Knock the mark out in the foreground color, keeping its alpha.
+magick "$SRC" -fill "$FG" -colorize 100 "$TMP/mark.png"
 
 # render_on_canvas <out.png> <canvas_w> <canvas_h> <logo_width_px>
 render_on_canvas() {
-    rsvg-convert -w "$4" "$TMP/logo.svg" -o "$TMP/mark.png"
-    magick -size "$2x$3" "xc:$BG" "$TMP/mark.png" \
+    magick -size "$2x$3" "xc:$BG" \
+        \( "$TMP/mark.png" -resize "$4x" \) \
         -gravity center -composite "$1"
 }
 
-# Launcher icons: W mark (ratio 118.1:85) at 76% width. Maskable variant
+# Launcher icons: bird mark (ratio 311:249) at 76% width. Maskable variant
 # smaller so the mark's whole bounding box (diagonal!) stays inside the
 # central-80% safe circle of Android launcher masks: diagonal <= 0.8*512
-# gives width <= 410*118.1/sqrt(118.1^2+85^2) ~= 333.
+# gives width <= 410*311/sqrt(311^2+249^2) ~= 320.
+render_on_canvas "$IMG_DIR/favicon.png"            32  32  24
 render_on_canvas "$IMG_DIR/icon-192.png"          192 192 146
 render_on_canvas "$IMG_DIR/icon-512.png"          512 512 390
-render_on_canvas "$IMG_DIR/icon-512-maskable.png" 512 512 330
+render_on_canvas "$IMG_DIR/icon-512-maskable.png" 512 512 320
 
 # iOS startup images (apple-touch-startup-image): iOS shows a splash ONLY when
 # an image matches the device's point size x DPR exactly. Portrait iPhone set;
@@ -96,8 +96,8 @@ grep -q "name=\"theme-color\" content=\"$BG\"" "$RES_DIR/../warp/templates/base.
 
 echo "$SPLASH_SIZES" | grep -v '^\s*$' | while read -r W H D _comment; do
     PW=$((W * D)); PH=$((H * D))
-    # W mark at 45% of screen width, centered on the brand background.
+    # Bird mark at 45% of screen width, centered on the brand background.
     render_on_canvas "$SPLASH_DIR/splash-${PW}x${PH}.png" "$PW" "$PH" $((PW * 45 / 100))
 done
 
-echo "done: $(ls "$IMG_DIR"/icon-*.png "$SPLASH_DIR" | wc -l | tr -d ' ') files"
+echo "done: $(ls "$IMG_DIR"/favicon.png "$IMG_DIR"/icon-*.png "$SPLASH_DIR" | wc -l | tr -d ' ') files"

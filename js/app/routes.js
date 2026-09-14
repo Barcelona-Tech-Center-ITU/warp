@@ -30,6 +30,7 @@ export const routes = [
   { name: 'groups', pattern: '/groups', load: () => import(/* webpackChunkName: "view-groups" */ '../views/groups.js') },
   { name: 'zones', pattern: '/zones', load: () => import(/* webpackChunkName: "view-zones" */ '../views/zones.js') },
   { name: 'plans', pattern: '/plans', load: () => import(/* webpackChunkName: "view-plans" */ '../views/plans.js') },
+  { name: 'capacity', pattern: '/capacity', load: () => import(/* webpackChunkName: "view-capacity" */ '../views/capacity.js') },
   { name: 'groupAssign', pattern: '/groups/assign/:group_login', load: () => import(/* webpackChunkName: "view-groupAssign" */ '../views/groupAssign.js') },
   { name: 'zoneAssign', pattern: '/zones/assign/:zid', load: () => import(/* webpackChunkName: "view-zoneAssign" */ '../views/zoneAssign.js') },
   // /bookings and /bookings/report share one module (views/bookings.js);

@@ -12,6 +12,9 @@ node_modules/
 /warp/templates/headers/
 /warp/static/dist/
 
+# deployment secrets (Dokploy writes its Environment tab into .env)
+.env
+
 # local scratch / generated artifacts
 /graphify-out/
 PLAN_*.md

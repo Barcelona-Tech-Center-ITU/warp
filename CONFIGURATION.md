@@ -69,6 +69,8 @@ environment:
 | `OMITTED_WEEKDAYS`           | `[]`         |    no    | Weekday numbers to grey out (0=Mon … 6=Sun)    |
 | `WEEK_START_DAY`             | `0`          |    no    | First column of the booking calendar (0=Mon … 6=Sun) |
 | `AUTOBOOK_USAGE_WINDOW_DAYS` | `30`         |    no    | Days window for auto-book seat ranking         |
+| `CAPACITY_WARN_THRESHOLD`    | `75`         |    no    | Occupancy % at which the capacity dashboard marks a day busy   |
+| `CAPACITY_ALERT_THRESHOLD`   | `90`         |    no    | Occupancy % at which the capacity dashboard raises an alert |
 | `MIN_PASSWORD_LENGTH`        | `6`          |    no    | Minimum password length                        |
 | `LOGIN_IGNORECASE`           | `true`       |    no    | Match logins case-insensitively (all backends) |
 | `MAX_REPORT_ROWS`            | `5000`       |    no    | Maximum rows in Excel export                   |
@@ -227,7 +229,16 @@ WARP_THEME_FILE=https://cdn.example.org/warp/theme.css
 The file is loaded after the base bundle, so it only needs to redefine the
 `--warp-*` tokens it wants to change (e.g. `--warp-primary`, `--warp-secondary`,
 `--warp-nav-bg`). See the comments in `warp/static/theme.css` for the full token
-list and which roles drive what.
+list and which roles drive what. The shipped theme is the Giga palette: primary
+`#1B3A6B`, secondary `#1E6BB8`.
+
+`THEME_FILE` covers colours only. The PWA manifest colours, the `theme-color`
+meta tag, the launcher icons and the iOS splash screens are baked into the
+build, so a runtime re-brand still installs with the stock Giga navy — changing
+those means editing `warp/view.py`, `warp/templates/base.html` and re-running
+`res/gen_pwa_assets.sh` (which fails loudly if the four hardcode sites drift
+apart). The logo itself is likewise a build-time asset; see
+[res/icons/README.md](res/icons/README.md).
 
 ---
 
@@ -311,6 +322,26 @@ independent of this system-wide window.
 | Variable                     | Default | Description                                                                                                  |
 | ---------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
 | `AUTOBOOK_USAGE_WINDOW_DAYS` | `30`    | Number of past days considered when ranking seats by personal booking frequency for the auto-book algorithm. |
+
+---
+
+## Capacity dashboard
+
+The **Capacity** view (open to every user) reports, for every plan and every day
+of the booking window, the peak number of simultaneously booked seats as a
+percentage of the plan's bookable seats (enabled seats in a non-disabled zone).
+A regular user only sees the plans and zones they can book in; a site admin sees
+all of them. These two thresholds decide how a day is flagged.
+
+| Variable                   | Default | Description                                                                                                             |
+| -------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `CAPACITY_WARN_THRESHOLD`  | `75`    | Occupancy percentage from which a day counts as busy (shown in the warning colour).                                      |
+| `CAPACITY_ALERT_THRESHOLD` | `90`    | Occupancy percentage from which a day counts as an alert: shown in the alert colour and listed in the banner at the top. |
+
+```sh
+WARP_CAPACITY_WARN_THRESHOLD=60    # flag days as busy earlier
+WARP_CAPACITY_ALERT_THRESHOLD=85
+```
 
 ---
 

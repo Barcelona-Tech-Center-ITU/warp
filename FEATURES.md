@@ -3,6 +3,8 @@
 > **WARP** — Workspace Autonomous Reservation Program  
 > A hybrid-office desk (and parking) reservation system.  
 > This document describes everything a user, tester, or administrator can do in WARP.
+> WARP is the name of the codebase; the app presents itself to users as
+> **Giga Desk Booking** (browser title, installed-app name, logo lockup).
 
 The behaviour described here is covered by the end-to-end Playwright suite in
 [`e2e/`](e2e/) (see [`e2e/README.md`](e2e/README.md) for how to run it).
@@ -135,10 +137,17 @@ The zone type influences what role a user effectively has:
 
 - **All users**: a **Home** link in the top bar (and the mobile menu) goes to the landing page (`/`). If a default plan is set, `/` still redirects to that plan — the same as after login.
 - **Non-admin users**: also see "Bookings" plus only the **Plans** containing seats in zones they can access (plus public zones).
+- **Every user**: sees "Bookings", "Capacity", and only the **Plans** containing seats in zones they can access (plus public zones).
 - **Admins** see an additional **settings (gear) icon** dropdown in the top bar that contains two groups:
   - **User management**: Users, Groups
   - **Plan management**: Zones, Plans
 - The right-side admin nav ("Report") remains; the old flat Users/Groups/Zones links were folded into the grouped dropdown.
+
+### 2.5 Landing Page
+
+- `/` is a short introduction to the tool: what a plan is, the four steps to book a seat, what the Bookings list is for, and what the Capacity dashboard tells you (with a link to it).
+- Every user lands here after login; it is also reachable at any time via the logo.
+- If the user has a **default plan** set, an "Open _plan name_" button appears on the page as a shortcut (see §14.1).
 
 ---
 
@@ -469,7 +478,7 @@ The old "Already booked in another zone" section is gone; an existing booking on
 - Shows **future** bookings in zones the user is assigned to, plus the user's own future bookings in zones they no longer have access to (so they can still release them — the plan map can't reach a seat in a zone they can't open).
 - Columns: User name, Plan, Seat, Time (merged from/to into one column).
 - A **delete button** (🗑) appears for any of the user's **own** bookings (regardless of their role in that zone — viewers and users who have lost access can still release their own), plus any booking in a zone where they have **Zone Admin** role.
-- Filtering by user name, plan, seat, and date range.
+- Filtering by user name, plan, seat, and date range. The user-name filter starts empty, so every visible booking is listed; type a name to narrow the list.
 - Sorting by time and user name.
 - Paginated with remote data loading.
 
@@ -479,6 +488,15 @@ The old "Already booked in another zone" section is gone; an existing booking on
 - Separate **From** and **To** date columns with date-picker filters.
 - Defaults: last 2 weeks of data, sorted by To (descending), then From (descending), then Login.
 - **Export to Excel** (`.xlsx`): generates an Excel file with timestamps formatted as dates. Limited to `MAX_REPORT_ROWS` (default: 5000) rows. A warning is shown if the selection exceeds the limit.
+
+### 11.3 Capacity Dashboard (all users)
+- Reached from the "Capacity" link in the top nav; one card per plan, ordered by plan name.
+- **A regular user sees only the plans they can access**, and the numbers cover only the seats in zones they could book in — the same set that drives their plan links. A site admin sees every plan and all of its seats.
+- **Capacity** of a plan = its enabled seats that sit in a non-disabled zone.
+- For each day of the booking window (today through `WEEKS_IN_ADVANCE`, skipping `OMITTED_WEEKDAYS`) the card shows the **peak occupancy**: the highest number of seats booked at the same moment that day, as a bar plus the exact `booked / capacity (percent)` figure. Days are the plan's own local days, so plans in different timezones stay comparable.
+- The badge next to the plan name is the highest percentage across the whole window.
+- Percentages at or above `CAPACITY_WARN_THRESHOLD` (default 75%) are shown as busy; at or above `CAPACITY_ALERT_THRESHOLD` (default 90%) they are shown as an alert and listed in a banner at the top of the page, so an admin sees at a glance which plan runs out of seats and when.
+- Plans with no bookable seats show "No bookable seats on this plan" instead of the day list.
 
 ---
 
@@ -546,8 +564,9 @@ The old "Already booked in another zone" section is gone; an existing booking on
 Accessible from the user menu (dropdown in the top-right corner).
 
 ### 14.1 Default Plan
-- Choose which plan opens by default after login.
-- If the default plan is no longer accessible, WARP falls back to the landing page.
+- Choose the plan you open most often. It appears as an "Open _plan name_" shortcut button on the landing page.
+- WARP no longer redirects away from the landing page: everyone lands on the introduction and takes the shortcut (or a nav link) from there.
+- If the default plan is deleted or no longer accessible, the button is simply not shown.
 
 ### 14.2 Default Day
 - Controls which day is pre-selected when opening a plan:

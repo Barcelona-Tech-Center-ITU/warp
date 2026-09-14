@@ -114,7 +114,7 @@ WARP_DATABASE_PASSWORD=password
 
 For all configuration options — environment variables, secret key generation, language, and authentication providers (LDAP, Azure AD, OIDC, SAML) — see [CONFIGURATION.md](CONFIGURATION.md).
 
-For ready-to-use deployment examples (Docker Compose, Podman Quadlet with systemd) see [`containers/README.md`](containers/README.md).
+For ready-to-use deployment examples (Docker Compose, Podman Quadlet with systemd) see [`containers/README.md`](containers/README.md); for [Dokploy](https://dokploy.com) there is a step-by-step guide in [`containers/dokploy/README.md`](containers/dokploy/README.md).
 
 # Development
 
@@ -151,6 +151,15 @@ $ flask --app warp --debug run
 ```
 
 After that, open http://127.0.0.1:5000 in your browser and log in with the default credentials.
+
+## Branding
+
+This build ships as **Giga Desk Booking**: the giga / UNICEF / ITU logo lockup
+and a navy (`#1B3A6B`) / blue (`#1E6BB8`) palette. Colours all come from
+`warp/static/theme.css`, which a deployment can replace at runtime via
+`WARP_THEME_FILE` (see [CONFIGURATION.md](CONFIGURATION.md)); the logo artwork
+and the masters it is derived from are described in
+[res/icons/README.md](res/icons/README.md).
 
 # Testing
 
