@@ -129,6 +129,8 @@
         },
         "Password": "Hasło",
         "Bookings only": "Tylko rezerwacje",
+        "Home": "Strona główna",
+        "Bookings": "Rezerwacje",
         "Report": "Raport",
         "Capacity": "Obłożenie",
         "capacity": {

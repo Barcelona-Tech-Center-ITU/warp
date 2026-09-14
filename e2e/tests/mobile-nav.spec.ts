@@ -65,4 +65,20 @@ test.describe('mobile sidenav', () => {
     await expect(page.locator('#mobile-nav')).not.toBeInViewport();
   });
 
+  test('Home in the sidenav goes to the landing page and closes the menu', async ({ page }) => {
+    await logIn(page, ADMIN);
+    await waitForViewReady(page);
+
+    await page.goto('/bookings');
+    await waitForViewReady(page, 'bookings');
+
+    await page.locator('.sidenav-trigger').click();
+    await expect(page.locator('#mobile-nav')).toBeInViewport();
+
+    await page.locator('#mobile-nav a', { hasText: 'Home' }).click();
+    await waitForViewReady(page, 'index');
+    await expect(page.locator('#mobile-nav')).not.toBeInViewport();
+    await expect(page.locator('.index_container')).toBeVisible();
+  });
+
 });

@@ -135,6 +135,8 @@ The zone type influences what role a user effectively has:
 
 ### 2.4 Navigation Visibility
 
+- **All users**: a **Home** link in the top bar (and the mobile menu) goes to the landing page (`/`). If a default plan is set, `/` still redirects to that plan — the same as after login.
+- **Non-admin users**: also see "Bookings" plus only the **Plans** containing seats in zones they can access (plus public zones).
 - **Every user**: sees "Bookings", "Capacity", and only the **Plans** containing seats in zones they can access (plus public zones).
 - **Admins** see an additional **settings (gear) icon** dropdown in the top bar that contains two groups:
   - **User management**: Users, Groups
@@ -679,7 +681,7 @@ All text on these pages is translated in the owner’s language (a user with no 
 - After login, WARP checks if the user has a **default plan** preference set.
 - If the default plan is accessible, the user is redirected directly to that plan's map.
 - If not (no preference, or plan no longer accessible), the user sees the landing page with the WARP logo.
-- The user can navigate to any accessible plan from the navigation bar.
+- The user can navigate to any accessible plan from the navigation bar, or back to the landing page via **Home**.
 
 ---
 

@@ -423,7 +423,7 @@ nav .sidenav-trigger {
     }
 }
 
-/* Desktop nav "tab" indicator for the text-window links (Bookings, plans, and
+/* Desktop nav "tab" indicator for the text-window links (Home, Bookings, plans, and
    the admin Report link): a Materialize-tabs-style 3px underline under the
    active link. app/nav.js setActive() toggles .active on the <li> per route.
    The dropdown-trigger items (user/admin menus) are not .nav-plan-link, so

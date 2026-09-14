@@ -4,7 +4,8 @@ import * as bootstrap from './bootstrap.js';
 
 // Builds the "Bookings" + accessible-plan links in the desktop nav and the
 // #mobile-nav sidenav from /xhr/bootstrap (replaces the old server-rendered
-// headerDataL loop). #nav-left-dynamic is itself a <ul>, so injecting <li>s via
+// headerDataL loop). Home is static in spa.html (it doesn't depend on the
+// plan list). #nav-left-dynamic is itself a <ul>, so injecting <li>s via
 // innerHTML is safe; #mobile-nav-dynamic is a <template> marker inside the
 // <ul class="sidenav"> shell (a wrapper <li> can't safely hold nested <li>
 // children) — dynamic items are inserted as its following siblings and tagged
