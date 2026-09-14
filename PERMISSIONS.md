@@ -141,10 +141,28 @@ an admin could be auto-booked into a zone they merely oversee but never sit in.
 The bypass still applies to viewing, managing, and booking _as_ another user.
 
 > Implementation note: the booking endpoints (`getSeats`, `apply`, `autoBook`)
-> short-circuit to _zone admin_ when `flask.g.isAdmin` is set, mirroring the
-> bypasses already present in the view layer (`view.plan`, `view.planImage`,
-> `zone.getUsers`). A site admin therefore does **not** need a `zone_assign` row
-> to use a plan.
+> and the bookings list (`bookings.listW`) short-circuit to _zone admin_ when
+> `flask.g.isAdmin` is set, mirroring the bypasses already present in the view
+> layer (`view.plan`, `view.planImage`, `zone.getUsers`). A site admin therefore
+> does **not** need a `zone_assign` row to use a plan or to see/release every
+> future booking on `/bookings`.
+
+### Bookings list visibility
+
+The `/bookings` table (future bookings, not the Report) is **not** "everyone in
+zones you can access":
+
+- A regular user or zone viewer sees **only their own** future bookings
+  (including leftovers in zones they lost access to).
+- A zone admin additionally sees **every** future booking in zones they
+  administer. In zones where they are only a user or viewer, they see only
+  their own.
+- A site admin sees **every** future booking globally, even in zones with no
+  `zone_assign` row, and can release any of them from the list.
+
+The plan map still shows other people's occupancy; that is how you pick a free
+seat. The Report (`/bookings/report`) remains site-admin only and includes the
+past.
 
 ---
 

@@ -1,11 +1,10 @@
 /**
  * Bookings page — public zone visibility regression tests.
  *
- * These tests verify that the /bookings list page correctly shows bookings in
- * PUBLIC_VIEW and PUBLIC_BOOK zones for users who have NO explicit zone_assign
- * entry. This was previously broken because the query used an INNER JOIN on
- * user_to_zone_roles, which silently dropped all bookings in public zones for
- * such users.
+ * Own bookings in PUBLIC_VIEW / PUBLIC_BOOK zones must still appear for users
+ * who have NO explicit zone_assign entry (previously broken by an INNER JOIN
+ * on user_to_zone_roles). Foreign bookings in those zones stay hidden for
+ * non-admins — the list is own-only unless the actor administers the zone.
  *
  * Zone types (from warp/db.py):
  *   ZONE_TYPE_DISABLED    = 10
@@ -75,7 +74,7 @@ test.describe('bookings page — public zone visibility', () => {
     ).toBeVisible();
   });
 
-  test('PUBLIC_BOOK: unassigned user sees another user booking but cannot delete (rw=false)', async ({ page }) => {
+  test('PUBLIC_BOOK: unassigned user does not see another user booking', async ({ page }) => {
     await setZoneType(1, ZONE_TYPE_PUBLIC_BOOK);
 
     const [seat] = await getZoneSeats(1);
@@ -85,11 +84,7 @@ test.describe('bookings page — public zone visibility', () => {
     await page.goto('/bookings');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.locator('.tabulator-row')).toHaveCount(1);
-    // Not own booking → rw=false even though PUBLIC_BOOK grants USER
-    await expect(
-      page.locator('.tabulator-row').first().locator('.material-icons.warp-icon-danger'),
-    ).toHaveCount(0);
+    await expect(page.locator('.tabulator-row')).toHaveCount(0);
   });
 
   test('DISABLED: unassigned user sees no bookings in disabled zone', async ({ page }) => {

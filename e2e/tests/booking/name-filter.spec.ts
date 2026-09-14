@@ -1,6 +1,7 @@
 /**
- * Bookings page "User name" header filter starts empty (all visible
- * bookings) and uses a regular starts-with match once the user types.
+ * Bookings page "User name" header filter starts empty over whatever the
+ * actor is allowed to see, then uses a regular starts-with match on type.
+ * Logged in as user1 (zone admin of Zone 1) so both names stay visible.
  */
 import { test, expect } from '../../fixtures';
 import { logIn } from '../../helpers/auth';
@@ -10,7 +11,7 @@ import { getZoneSeats, futureDayTs } from '../../helpers/booking';
 import { fillHeaderFilter } from '../../helpers/bookings-page';
 
 test.describe('bookings page name filter', () => {
-  test('starts empty showing everyone, then starts-with on type', async ({ page }) => {
+  test('zone admin: starts empty showing everyone in the zone, then starts-with on type', async ({ page }) => {
     const seats = await getZoneSeats(1);
     const ts = futureDayTs(1);
     // Two future bookings in the shared Zone 1 by two different users.
@@ -30,7 +31,7 @@ test.describe('bookings page name filter', () => {
     const row = (i: number) =>
       page.locator('.tabulator-row', { hasText: seats[i].name });
 
-    // Default: empty box, no user filter → both bookings visible.
+    // Default: empty box, no user filter → both bookings visible to a zone admin.
     await expect(nameInput).toHaveValue('');
     await expect(row(0)).toBeVisible();
     await expect(row(1)).toBeVisible();
@@ -41,7 +42,7 @@ test.describe('bookings page name filter', () => {
     await expect(row(1)).toBeVisible();
     await expect(row(0)).toHaveCount(0);
 
-    // Clearing restores everyone.
+    // Clearing restores everyone the zone admin is allowed to see.
     await fillHeaderFilter(page, 'user_name', '');
     await expect(row(0)).toBeVisible();
     await expect(row(1)).toBeVisible();
