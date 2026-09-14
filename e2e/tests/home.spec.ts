@@ -18,7 +18,6 @@ test.describe('landing page', () => {
     await page.goto('/');
     await waitForViewReady(page, 'index');
 
-    await expect(page.locator('.index_intro')).toContainText('reserve a desk');
     await expect(page.locator('.index_steps li')).toHaveCount(4);
     await expect(page.locator('.card-title', { hasText: 'How busy is the office?' })).toBeVisible();
   });

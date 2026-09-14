@@ -141,7 +141,6 @@
             "AlertsHeading": "Dni z obłożeniem co najmniej %{pct}%"
         },
         "home": {
-            "Intro": "WARP służy do rezerwacji biurka lub miejsca parkingowego w biurze. Wszystko odbywa się na planie: mapie piętra lub parkingu, z jedną ikoną na każde miejsce.",
             "OpenDefaultPlan": "Otwórz %{plan}",
             "HowToTitle": "Rezerwacja miejsca",
             "Step1": "Wybierz plan z menu na górze strony.",
