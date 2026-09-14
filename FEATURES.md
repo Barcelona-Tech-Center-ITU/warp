@@ -475,12 +475,15 @@ The old "Already booked in another zone" section is gone; an existing booking on
 ## 11. Bookings List & Report
 
 ### 11.1 Bookings List (available to all users)
-- Shows **future** bookings in zones the user is assigned to, plus the user's own future bookings in zones they no longer have access to (so they can still release them — the plan map can't reach a seat in a zone they can't open).
+- Shows **future** bookings only (today and later, in each booking's plan timezone). Who appears depends on the actor:
+  - **Regular users and viewers** see **only their own** bookings, including leftovers in zones they no longer have access to (so they can still release them — the plan map can't reach a seat in a zone they can't open).
+  - **Zone admins** additionally see everyone else's future bookings in the zones they administer. In zones where they are only a user or viewer, they see only their own.
+  - **Site admins** see every future booking across all zones (they do not need a `zone_assign` row).
 - Columns: User name, Plan, Seat, Time (merged from/to into one column).
-- A **delete button** (🗑) appears for any of the user's **own** bookings (regardless of their role in that zone — viewers and users who have lost access can still release their own), plus any booking in a zone where they have **Zone Admin** role.
-- Filtering by user name, plan, seat, and date range. The user-name filter starts empty, so every visible booking is listed; type a name to narrow the list.
+- A **delete button** (🗑) appears for any of the user's **own** bookings (regardless of their role in that zone — viewers and users who have lost access can still release their own), plus any booking in a zone where they have **Zone Admin** role. Site admins can release any booking from the list.
+- Filtering by user name, plan, seat, and date range. The user-name filter starts empty over whatever the actor is allowed to see; type a name to narrow the list.
 - Sorting by time and user name.
-- Paginated with remote data loading.
+- Paginated with remote data loading. The plan map still shows other people's occupancy (that is how you pick a free seat); this page does not.
 
 ### 11.2 Report (Admin Only)
 - Shows **all** bookings (past and future) across all zones.
@@ -811,6 +814,7 @@ menus) switches between them, showing a **moon** icon in light mode and a **sun*
 | Create/edit/delete users              | ❌  | ❌  | ❌  | ✅  |
 | Create/edit/delete groups             | ❌  | ❌  | ❌  | ✅  |
 | Access booking report                 | ❌  | ❌  | ❌  | ✅  |
+| See others' bookings on the list      | ❌  | ❌  | ✅  | ✅  |
 | Export bookings to Excel              | ❌  | ❌  | ❌  | ✅  |
 | See disabled seats                    | ❌  | ❌  | ✅  | ✅¹ |
 | Change own password                   | ✅³ | ✅³ | ✅³ | ✅³ |

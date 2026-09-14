@@ -3,7 +3,7 @@
  */
 import { test, expect } from '../../fixtures';
 import { logIn } from '../../helpers/auth';
-import { USER1, USER2, USER3 } from '../../helpers/users';
+import { ADMIN, USER1, USER2, USER3 } from '../../helpers/users';
 import { querySql } from '../../helpers/db';
 import { futureDayTs, getZoneSeats } from '../../helpers/booking';
 import { insertBooking } from '../../helpers/bookings-page';
@@ -43,7 +43,7 @@ test.describe('bookings list visibility', () => {
     await expect(page.locator('.tabulator-row')).toHaveCount(0);
   });
 
-  test('user sees all bookings in their accessible zones (not only their own)', async ({ page }) => {
+  test('regular user sees only their own bookings', async ({ page }) => {
     const seats = await getZoneSeats(1);
     await insertBooking('user1', seats[0].id);
     await insertBooking('user2', seats[1].id);
@@ -51,7 +51,51 @@ test.describe('bookings list visibility', () => {
     await logIn(page, USER2);
     await page.goto('/bookings');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('.tabulator-row')).toHaveCount(2);
+    await expect(page.locator('.tabulator-row')).toHaveCount(1);
+    await expect(page.locator('.tabulator-row').first()).toContainText(seats[1].name);
+    await expect(page.locator('.tabulator-row', { hasText: 'Foo' })).toHaveCount(0);
+  });
+
+  test('site admin sees other users bookings globally', async ({ page }) => {
+    const [seat] = await getZoneSeats(1);
+    await insertBooking('user2', seat.id);
+
+    await logIn(page, ADMIN);
+    await page.goto('/bookings');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.tabulator-row')).toHaveCount(1);
+    await expect(page.locator('.tabulator-row').first()).toContainText('Bar');
+    await expect(
+      page.locator('.tabulator-row').first().locator('.material-icons.warp-icon-danger'),
+    ).toBeVisible();
+  });
+
+  test('site admin sees and can release bookings in zones with no zone_assign', async ({ page }) => {
+    // Sample data grants admin every zone; strip zone 2 so the isAdmin
+    // short-circuit is what admits the row (and the delete icon).
+    await querySql("DELETE FROM zone_assign WHERE login = 'admin' AND zid = 2");
+    const zone2Seats = await getZoneSeats(2);
+    await insertBooking('user1', zone2Seats[0].id);
+
+    await logIn(page, ADMIN);
+    await page.goto('/bookings');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.tabulator-row')).toHaveCount(1);
+    await expect(page.locator('.tabulator-row').first()).toContainText(zone2Seats[0].name);
+    await expect(
+      page.locator('.tabulator-row').first().locator('.material-icons.warp-icon-danger'),
+    ).toBeVisible();
+  });
+
+  test('zone user does not see others bookings in a zone they do not administer', async ({ page }) => {
+    // user1 is zone admin of zone 1 but only a user of zone 2 (via group_1b).
+    const zone2Seats = await getZoneSeats(2);
+    await insertBooking('admin', zone2Seats[0].id);
+
+    await logIn(page, USER1);
+    await page.goto('/bookings');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.tabulator-row')).toHaveCount(0);
   });
 
   test("another user's bookings in zones the user cannot access are NOT shown", async ({ page }) => {
@@ -111,19 +155,6 @@ test.describe('bookings list visibility', () => {
     await expect(
       page.locator('.tabulator-row').first().locator('.material-icons.warp-icon-danger'),
     ).toBeVisible();
-  });
-
-  test('delete icon is absent for another user booking seen by a regular user', async ({ page }) => {
-    const seats = await getZoneSeats(1);
-    await insertBooking('user1', seats[0].id);
-    await insertBooking('user2', seats[1].id);
-
-    await logIn(page, USER2);
-    await page.goto('/bookings');
-    await page.waitForLoadState('networkidle');
-
-    const user1Row = page.locator('.tabulator-row', { hasText: 'Foo' });
-    await expect(user1Row.locator('.material-icons.warp-icon-danger')).toHaveCount(0);
   });
 
   test('zone admin sees delete icon on other users bookings in their zone', async ({ page }) => {

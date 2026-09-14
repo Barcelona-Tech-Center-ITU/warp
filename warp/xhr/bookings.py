@@ -98,8 +98,9 @@ def listW(report = False):      # list is a built-in type
         .join(Users, on=(Book.login == Users.login))
 
     # user restrictions (in non-report mode)
-    # visibility: accessible zones (a row in the view means effective access —
-    # the view includes synthetic rows for public zones) and not in the past.
+    # visibility: future bookings only. Regular users/viewers see their own
+    # rows; zone admins additionally see everyone in zones they administer;
+    # site admins see every future booking globally (PERMISSIONS §4).
     if not report:
 
         # Privacy cutoff is per-booking TZ-aware (PLAN per_plan_timezone §7):
@@ -111,23 +112,24 @@ def listW(report = False):      # list is a built-in type
         # (mirrors users.delete, which compares view timestamptz columns).
         # today_in_tz_sql encapsulates the e2e debug time-offset.
         today_in_plan_tz = utils.today_in_tz_sql(Plan.timezone, as_epoch=True)
-        # LEFT JOIN the actor's own role row: a matching row exists iff they
-        # have effective access to the booking's zone (synthetic public-zone
-        # rows included). A user's OWN booking in a zone they no longer have a
-        # role for (access revoked after booking, or booked there via book-for
-        # then removed) must still be visible + deletable here — the plan map
-        # can't reach a seat in a zone they can't open, so the bookings table
-        # is the only UI path. Admit those own rows via Book.login == g.login;
-        # other users' bookings in no-access zones stay hidden (the disjunct
-        # only admits own rows). zone_role is NULL for the no-role case.
+        # LEFT JOIN the actor's own role row (synthetic public-zone rows
+        # included). Own bookings in a zone with no remaining role must still
+        # be visible + deletable here — the plan map can't reach a seat in a
+        # zone they can't open, so the bookings table is the only UI path.
+        # zone_role is NULL for that no-role case; SQL NULL <= ADMIN is false,
+        # so the own-login disjunct is what admits those rows.
         query = query.select_extend(UserToZoneRoles.zone_role) \
                 .join(UserToZoneRoles,
                       join_type=JOIN.LEFT_OUTER,
                       on=((UserToZoneRoles.zid == Seat.zid) &
-                          (UserToZoneRoles.login == flask.g.login))) \
-                .where((_FROM_UTC_SQL >= today_in_plan_tz) &
-                       (UserToZoneRoles.zone_role.is_null(False) |
-                        (Book.login == flask.g.login)))
+                          (UserToZoneRoles.login == flask.g.login)))
+        future = _FROM_UTC_SQL >= today_in_plan_tz
+        if flask.g.isAdmin:
+            query = query.where(future)
+        else:
+            query = query.where(future &
+                ((Book.login == flask.g.login) |
+                 (UserToZoneRoles.zone_role <= ZONE_ROLE_ADMIN)))
 
     columnsMap = {
         "id": Book.id,
@@ -241,10 +243,13 @@ def listW(report = False):      # list is a built-in type
                 # Book.login != g.login filter), so this is true even when they
                 # are only a VIEWER in the zone, or have lost access entirely
                 # (zone_role NULL via the LEFT JOIN above). Foreign bookings
-                # stay gated by the actor's zone-admin standing.
+                # stay gated by zone-admin standing, except a site admin
+                # (PERMISSIONS §4) who can release any row even without a
+                # zone_assign for that zone.
                 own = row["login"] == flask.g.login
                 role = row['zone_role']
-                d['rw'] = own or (role is not None and role <= ZONE_ROLE_ADMIN)
+                d['rw'] = flask.g.isAdmin or own or (
+                    role is not None and role <= ZONE_ROLE_ADMIN)
 
             else:
                 d["login"] = row["login"]
