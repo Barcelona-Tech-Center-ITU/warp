@@ -35,11 +35,13 @@
     <div id="spinner"></div>
 
     <ul class="sidenav" id="mobile-nav">
-        {# Bookings + accessible plans: filled client-side by app/nav.js from
-           /xhr/bootstrap (the plan-list query moved off the request path).
-           <template> is a valid script-supporting child of <ul> (unlike a
-           wrapper <li>, which can't safely hold injected <li> siblings) —
-           nav.js inserts the dynamic <li>s right after this marker. #}
+        {# Home is static (doesn't depend on the plan list). Bookings +
+           accessible plans are filled client-side by app/nav.js from
+           /xhr/bootstrap. <template> is a valid script-supporting child of
+           <ul> (unlike a wrapper <li>, which can't safely hold injected
+           <li> siblings) — nav.js inserts the dynamic <li>s right after
+           this marker. #}
+        <li><a href="{{ url_for('view.index') }}" class="nav-plan-link TR">Home</a></li>
         <template id="mobile-nav-dynamic"></template>
 
         {% if g.isAdmin %}
@@ -306,6 +308,9 @@
             </ul>
             {% endif %}
 
+            <ul class="left hide-on-med-and-down" id="nav-home">
+                <li><a href="{{ url_for('view.index') }}" class="nav-plan-link TR">Home</a></li>
+            </ul>
             <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down" id="nav-left-dynamic">
                 {# filled client-side by app/nav.js from /xhr/bootstrap #}

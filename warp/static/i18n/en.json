@@ -129,6 +129,8 @@
         },
         "Password": "Password",
         "Bookings only": "Bookings only",
+        "Home": "Home",
+        "Bookings": "Bookings",
         "Report": "Report",
         "Users": "Users",
         "Groups": "Groups",
