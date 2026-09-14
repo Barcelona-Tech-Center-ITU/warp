@@ -158,6 +158,13 @@ def bookings(report):
     return flask.render_template('spa.html')
 
 
+@bp.route("/capacity")
+def capacity():
+    # Open to every authenticated user; the XHR scopes the numbers to the zones
+    # the caller can book in (site admins see every plan).
+    return flask.render_template('spa.html')
+
+
 @bp.route("/plan/<pid>")
 def plan(pid):
     return flask.render_template('spa.html')
@@ -201,9 +208,6 @@ def plans():
     return _admin_spa()
 
 
-@bp.route("/capacity")
-def capacity():
-    return _admin_spa()
 
 
 @bp.route("/groups/assign/<group_login>")

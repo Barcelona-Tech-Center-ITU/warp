@@ -40,16 +40,28 @@ def peak_concurrency(intervals, dayFrom, dayTo):
 @bp.route("summary", endpoint='summary', methods=["GET"])
 def summary():
     """Per-plan occupancy over the booking horizon: for each bookable day, the
-    peak number of simultaneously booked seats against the plan's capacity."""
-    if not flask.g.isAdmin:
-        flask.abort(403)
+    peak number of simultaneously booked seats against the plan's capacity.
 
+    Open to every user, but a regular user only ever sees the seats they could
+    book themselves: the numbers are scoped to their accessible zones, and plans
+    with no such zone are left out entirely. A site admin sees every plan."""
     config = flask.current_app.config
     thresholds = {
         "warn": config['CAPACITY_WARN_THRESHOLD'],
         "alert": config['CAPACITY_ALERT_THRESHOLD'],
     }
     omittedWeekdays = set(config['OMITTED_WEEKDAYS'])
+
+    # None means "no zone restriction" (site admin). Same effective-roles view
+    # the nav uses for its plan links, so the two lists can't drift apart.
+    accessibleZids = None
+    if not flask.g.isAdmin:
+        accessibleZids = [r['zid'] for r in
+                          UserToZoneRoles.select(UserToZoneRoles.zid)
+                                         .where(UserToZoneRoles.login == flask.g.login)
+                                         .iterator()]
+        if not accessibleZids:
+            return {"thresholds": thresholds, "plans": []}, 200
 
     plans = [*Plan.select(Plan.id, Plan.name, Plan.timezone).order_by(Plan.name).iterator()]
     if not plans:
@@ -58,12 +70,20 @@ def summary():
     # A seat counts towards capacity only if it can actually be booked: enabled,
     # and in a zone that isn't disabled. The booking query filters identically so
     # numerator and denominator can never disagree.
+    seatFilter = (Seat.enabled == True) & (Zone.zone_type != ZONE_TYPE_DISABLED)
+    if accessibleZids is not None:
+        seatFilter &= Seat.zid.in_(accessibleZids)
+
     capacityQuery = Seat.select(Seat.pid, COUNT_STAR.alias('capacity')) \
         .join(Zone, on=(Seat.zid == Zone.id)) \
-        .where(Seat.enabled == True) \
-        .where(Zone.zone_type != ZONE_TYPE_DISABLED) \
+        .where(seatFilter) \
         .group_by(Seat.pid)
     capacity = {r['pid']: r['capacity'] for r in capacityQuery.iterator()}
+
+    if accessibleZids is not None:
+        plans = [p for p in plans if p['id'] in capacity]
+        if not plans:
+            return {"thresholds": thresholds, "plans": []}, 200
 
     # Each plan has its own timezone, so its horizon sits on its own wall-clock
     # scale. One query over the union of the horizons, split per plan in Python.
@@ -74,8 +94,7 @@ def summary():
     bookQuery = Book.select(Seat.pid, Book.fromts, Book.tots) \
         .join(Seat, on=(Book.sid == Seat.id)) \
         .join(Zone, on=(Seat.zid == Zone.id)) \
-        .where(Seat.enabled == True) \
-        .where(Zone.zone_type != ZONE_TYPE_DISABLED) \
+        .where(seatFilter) \
         .where((Book.fromts < globalTo) & (Book.tots > globalFrom))
 
     bookingsByPlan = defaultdict(list)

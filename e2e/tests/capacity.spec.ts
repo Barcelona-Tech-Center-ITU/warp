@@ -1,16 +1,17 @@
 /**
- * Capacity dashboard: per-plan peak occupancy over the booking horizon, and
- * the warn/alert thresholds (CAPACITY_WARN_THRESHOLD / CAPACITY_ALERT_THRESHOLD).
+ * Capacity dashboard: per-plan peak occupancy over the booking horizon, the
+ * warn/alert thresholds (CAPACITY_WARN_THRESHOLD / CAPACITY_ALERT_THRESHOLD),
+ * and the zone scoping that decides which plans a regular user sees.
  *
  * Plan Parking (pid 3) is the plan under test: 5 seats and no sample bookings,
  * so every percentage is exact and readable (1 seat = 20%).
  */
-import { test, expect } from '../../fixtures';
-import { logIn } from '../../helpers/auth';
-import { ADMIN, USER1 } from '../../helpers/users';
-import { querySql } from '../../helpers/db';
-import { futureDayTs, getZoneSeats, getFirstZoneDate, bookSeatUI } from '../../helpers/booking';
-import { waitForViewReady } from '../../helpers/spa';
+import { test, expect } from '../fixtures';
+import { logIn } from '../helpers/auth';
+import { ADMIN, USER1 } from '../helpers/users';
+import { querySql } from '../helpers/db';
+import { futureDayTs, getZoneSeats, getFirstZoneDate, bookSeatUI } from '../helpers/booking';
+import { waitForViewReady } from '../helpers/spa';
 
 const PARKING_PID = 3;
 const PARKING_ZID = 3;
@@ -43,13 +44,24 @@ async function seedFullDay(count: number): Promise<number> {
 
 test.describe('capacity dashboard', () => {
 
-  test('admin can access /capacity, a regular user cannot', async ({ page }) => {
+  test('the dashboard is open to every logged-in user', async ({ page }) => {
     await logIn(page, ADMIN);
     expect((await page.request.get('/capacity')).status()).toBe(200);
 
     await logIn(page, USER1);
-    expect((await page.request.get('/capacity')).status()).toBe(403);
-    expect((await page.request.get('/xhr/capacity/summary')).status()).toBe(403);
+    expect((await page.request.get('/capacity')).status()).toBe(200);
+    expect((await page.request.get('/xhr/capacity/summary')).status()).toBe(200);
+  });
+
+  test('a regular user only sees the plans they can access', async ({ page }) => {
+    // user1 reaches Zone 1A directly and Zone 1B through group_1b, but has no
+    // role in Parking — so Plan Parking must not appear at all.
+    await logIn(page, USER1);
+    await page.goto('/capacity');
+    await waitForViewReady(page, 'capacity');
+
+    await expect(page.locator('.warp-capacity-plan-name')).toHaveText(['Plan 1A', 'Plan 1B']);
+    await expect(parkingCard(page)).toHaveCount(0);
   });
 
   test('every plan gets a card, empty plans read 0%', async ({ page }) => {
@@ -106,11 +118,10 @@ test.describe('capacity dashboard', () => {
     await expect(alerts.locator('.warp-capacity-alert-pct')).toHaveText('100%');
   });
 
-  test('capacity is reachable from the admin menu', async ({ page }) => {
-    await logIn(page, ADMIN);
+  test('capacity is reachable from the main nav by a regular user', async ({ page }) => {
+    await logIn(page, USER1);
     await page.goto('/');
-    await page.locator('nav .dropdown-trigger[data-target="admin_menu_dropdown"]').click();
-    await page.locator('#admin_menu_dropdown a', { hasText: 'Capacity' }).click();
+    await page.locator('#nav-left-dynamic a', { hasText: 'Capacity' }).click();
     await waitForViewReady(page, 'capacity');
     expect(new URL(page.url()).pathname).toBe('/capacity');
   });
