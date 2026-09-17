@@ -132,7 +132,6 @@
         "Home": "Inicio",
         "Existing Bookings": "Reservas existentes",
         "Report": "Reporte",
-        "Capacity": "Capacidad",
         "capacity": {
             "PeakOccupancy": "Ocupación máxima por día",
             "Seats": "%{count} asientos reservables",
@@ -148,8 +147,7 @@
             "Step3": "Haz clic en un puesto libre para reservarlo. Haz clic en tu propio puesto para cambiar las horas o liberarlo.",
             "Step4": "¿Con prisa? El botón + reserva por ti el mejor puesto disponible.",
             "BookingsHint": "Reservas existentes muestra todo lo que has reservado y permite liberar un puesto que ya no necesitas.",
-            "CapacityTitle": "¿Qué tan llena está la oficina?",
-            "CapacityText": "El panel de capacidad muestra, para cada plano y cada día reservable, cuántos puestos están ocupados en el momento de mayor ocupación del día. Úsalo para elegir un día más tranquilo o para ver cuándo una planta se queda sin puestos: los días cargados se resaltan y los más llenos aparecen arriba."
+            "CapacityTitle": "¿Qué tan llena está la oficina?"
         },
         "Users": "Usuarios",
         "Groups": "Grupos",

@@ -598,19 +598,8 @@ nav .lang-dropdown {
     list-style: decimal;
     margin-bottom: var(--warp-space-2);
 }
-/* Stretch both intro cards to the taller one's height when they sit side by
-   side (Materialize .row is a grid, so the columns already share a row). */
-.index_intro > .col {
-    display: flex;
-}
 .index_intro .card {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
     width: 100%;
-}
-.index_intro .card-content {
-    flex: 1 1 auto;
 }
 
 /* Client-side error view (app/router.js renderErrorView): a plan/assign deep

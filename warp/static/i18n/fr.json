@@ -132,7 +132,6 @@
         "Home": "Accueil",
         "Existing Bookings": "Réservations existantes",
         "Report": "Rapport",
-        "Capacity": "Capacité",
         "capacity": {
             "PeakOccupancy": "Occupation maximale par jour",
             "Seats": "%{count} places réservables",
@@ -148,8 +147,7 @@
             "Step3": "Cliquez sur une place libre pour la réserver. Cliquez sur votre propre place pour modifier les horaires ou la libérer.",
             "Step4": "Pressé ? Le bouton + réserve pour vous la meilleure place disponible.",
             "BookingsHint": "Réservations existantes liste tout ce que vous avez réservé et permet de libérer une place dont vous n'avez plus besoin.",
-            "CapacityTitle": "Le bureau est-il chargé ?",
-            "CapacityText": "Le tableau de bord d'occupation indique, pour chaque plan et chaque jour réservable, combien de places sont prises au moment le plus chargé de la journée. Utilisez-le pour choisir un jour plus calme ou pour voir quand un étage arrive à saturation : les jours chargés sont mis en évidence et les jours les plus remplis apparaissent en haut."
+            "CapacityTitle": "Le bureau est-il chargé ?"
         },
         "Users": "Utilisateurs",
         "Groups": "Groupes",
