@@ -2,6 +2,7 @@
 
 import html from './html/index.html';
 import * as bootstrap from '../app/bootstrap.js';
+import { mount as mountCapacity } from './capacity.js';
 
 export { html };
 
@@ -14,8 +15,9 @@ export async function mount(ctx) {
   var logoDark = ctx.root.querySelector('#index-logo-dark');
   if (logoDark) logoDark.src = window.warpGlobals.URLs.logoWhite;
 
-  var capacityLink = ctx.root.querySelector('#index_capacity_link');
-  if (capacityLink) capacityLink.href = window.warpGlobals.URLs['capacity'];
+  // Dashboard XHR is independent of bootstrap; overlap the two so the intro
+  // cards and occupancy numbers arrive together.
+  var capacityReady = mountCapacity(ctx);
 
   // The landing page explains the tool, so it is never skipped — the default
   // plan preference turns into a shortcut button here instead of an automatic
@@ -31,6 +33,8 @@ export async function mount(ctx) {
       btn.style.display = '';
     }
   }
+
+  await capacityReady;
 }
 
 export default { html, mount };

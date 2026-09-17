@@ -130,7 +130,7 @@
         "Password": "Passwort",
         "Bookings only": "Nur Buchungen",
         "Home": "Startseite",
-        "Bookings": "Buchungen",
+        "Existing Bookings": "Bestehende Buchungen",
         "Report": "Bericht",
         "Capacity": "Auslastung",
         "capacity": {
@@ -147,10 +147,9 @@
             "Step2": "Markieren Sie im Kalender die gewünschten Tage und passen Sie die Uhrzeiten an.",
             "Step3": "Klicken Sie auf einen freien Platz, um ihn zu buchen. Ein Klick auf Ihren eigenen Platz ändert die Zeiten oder gibt ihn frei.",
             "Step4": "Keine Zeit? Die Schaltfläche + bucht automatisch den besten freien Platz.",
-            "BookingsHint": "Unter Buchungen sehen Sie alle Ihre Reservierungen und können einen Platz wieder freigeben.",
+            "BookingsHint": "Unter Bestehende Buchungen sehen Sie alle Ihre Reservierungen und können einen Platz wieder freigeben.",
             "CapacityTitle": "Wie voll ist das Büro?",
-            "CapacityText": "Das Auslastungs-Dashboard zeigt für jeden Plan und jeden buchbaren Tag, wie viele Plätze im Tagesmaximum belegt sind. So finden Sie einen ruhigeren Tag oder erkennen, wann eine Etage keine Plätze mehr frei hat: stark belegte Tage werden hervorgehoben, die fast vollen Tage stehen oben.",
-            "OpenCapacity": "Auslastungs-Dashboard öffnen"
+            "CapacityText": "Das Auslastungs-Dashboard zeigt für jeden Plan und jeden buchbaren Tag, wie viele Plätze im Tagesmaximum belegt sind. So finden Sie einen ruhigeren Tag oder erkennen, wann eine Etage keine Plätze mehr frei hat: stark belegte Tage werden hervorgehoben, die fast vollen Tage stehen oben."
         },
         "Users": "Benutzer",
         "Groups": "Gruppe",

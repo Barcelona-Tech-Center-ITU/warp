@@ -598,6 +598,20 @@ nav .lang-dropdown {
     list-style: decimal;
     margin-bottom: var(--warp-space-2);
 }
+/* Stretch both intro cards to the taller one's height when they sit side by
+   side (Materialize .row is a grid, so the columns already share a row). */
+.index_intro > .col {
+    display: flex;
+}
+.index_intro .card {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+}
+.index_intro .card-content {
+    flex: 1 1 auto;
+}
 
 /* Client-side error view (app/router.js renderErrorView): a plan/assign deep
    link whose context XHR returned 403/404, a server-down network failure, or
@@ -2486,13 +2500,14 @@ input[type=range]::-moz-range-track {
     background-color: var(--warp-surface);
 }
 
-/* ===== Capacity dashboard (admin view) =====
+/* ===== Capacity dashboard (on Home) =====
    One card per plan; each day is a label + a proportional bar + the raw
    peak/capacity figure. The three occupancy levels (ok / warn / alert) are the
    only colour decision here and reuse existing semantic roles — the thresholds
-   themselves come from the server (CAPACITY_*_THRESHOLD). */
+   themselves come from the server (CAPACITY_*_THRESHOLD). Scrolls with
+   .index_home, not in its own pane. */
 .warp-capacity {
-    overflow-y: auto;   /* #view-root clips; the card list scrolls inside it */
+    margin-top: var(--warp-space-4);
 }
 .warp-capacity-title {
     margin-bottom: var(--warp-space-4);

@@ -136,8 +136,8 @@ The zone type influences what role a user effectively has:
 ### 2.4 Navigation Visibility
 
 - **All users**: a **Home** link in the top bar (and the mobile menu) goes to the landing page (`/`). If a default plan is set, `/` still redirects to that plan — the same as after login.
-- **Non-admin users**: also see "Bookings" plus only the **Plans** containing seats in zones they can access (plus public zones).
-- **Every user**: sees "Bookings", "Capacity", and only the **Plans** containing seats in zones they can access (plus public zones).
+- **Non-admin users**: also see "Existing Bookings" plus only the **Plans** containing seats in zones they can access (plus public zones).
+- **Every user**: sees "Existing Bookings" and only the **Plans** containing seats in zones they can access (plus public zones). The Capacity dashboard is on the Home page, not a separate nav item.
 - **Admins** see an additional **settings (gear) icon** dropdown in the top bar that contains two groups:
   - **User management**: Users, Groups
   - **Plan management**: Zones, Plans
@@ -145,8 +145,8 @@ The zone type influences what role a user effectively has:
 
 ### 2.5 Landing Page
 
-- `/` is a short introduction to the tool: the four steps to book a seat, what the Bookings list is for, and what the Capacity dashboard tells you (with a link to it).
-- Every user lands here after login; it is also reachable at any time via the logo.
+- `/` is a short introduction to the tool: the four steps to book a seat, what the Existing Bookings list is for, and what the Capacity dashboard tells you. The dashboard itself sits on this page under the two intro cards (open to every signed-in user; numbers are scoped to the zones they can access).
+- Every user lands here after login; it is also reachable at any time via the logo. The old `/capacity` URL redirects here.
 - If the user has a **default plan** set, an "Open _plan name_" button appears on the page as a shortcut (see §14.1).
 
 ---
@@ -475,6 +475,7 @@ The old "Already booked in another zone" section is gone; an existing booking on
 ## 11. Bookings List & Report
 
 ### 11.1 Bookings List (available to all users)
+- Opened from **Existing Bookings** in the top nav (`/bookings`).
 - Shows **future** bookings only (today and later, in each booking's plan timezone). Who appears depends on the actor:
   - **Regular users and viewers** see **only their own** bookings, including leftovers in zones they no longer have access to (so they can still release them — the plan map can't reach a seat in a zone they can't open).
   - **Zone admins** additionally see everyone else's future bookings in the zones they administer. In zones where they are only a user or viewer, they see only their own.
@@ -493,7 +494,7 @@ The old "Already booked in another zone" section is gone; an existing booking on
 - **Export to Excel** (`.xlsx`): generates an Excel file with timestamps formatted as dates. Limited to `MAX_REPORT_ROWS` (default: 5000) rows. A warning is shown if the selection exceeds the limit.
 
 ### 11.3 Capacity Dashboard (all users)
-- Reached from the "Capacity" link in the top nav; one card per plan, ordered by plan name.
+- Shown on the Home page under the intro cards; one card per plan, ordered by plan name. There is no Capacity item in the top nav; `/capacity` redirects to `/`.
 - **A regular user sees only the plans they can access**, and the numbers cover only the seats in zones they could book in — the same set that drives their plan links. A site admin sees every plan and all of its seats.
 - **Capacity** of a plan = its enabled seats that sit in a non-disabled zone.
 - For each day of the booking window (today through `WEEKS_IN_ADVANCE`, skipping `OMITTED_WEEKDAYS`) the card shows the **peak occupancy**: the highest number of seats booked at the same moment that day, as a bar plus the exact `booked / capacity (percent)` figure. Days are the plan's own local days, so plans in different timezones stay comparable.

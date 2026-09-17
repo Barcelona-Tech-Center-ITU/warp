@@ -3,8 +3,9 @@
  * warn/alert thresholds (CAPACITY_WARN_THRESHOLD / CAPACITY_ALERT_THRESHOLD),
  * and the zone scoping that decides which plans a regular user sees.
  *
- * Plan Parking (pid 3) is the plan under test: 5 seats and no sample bookings,
- * so every percentage is exact and readable (1 seat = 20%).
+ * The dashboard lives on Home. Plan Parking (pid 3) is the plan under test:
+ * 5 seats and no sample bookings, so every percentage is exact and readable
+ * (1 seat = 20%).
  */
 import { test, expect } from '../fixtures';
 import { logIn } from '../helpers/auth';
@@ -18,6 +19,11 @@ const PARKING_ZID = 3;
 
 function parkingCard(page: import('@playwright/test').Page) {
   return page.locator('.warp-capacity-card').filter({ hasText: 'Plan Parking' });
+}
+
+async function openDashboard(page: import('@playwright/test').Page) {
+  await page.goto('/');
+  await waitForViewReady(page, 'index');
 }
 
 /** Book `count` parking seats for the whole of the same future day. A precondition
@@ -57,8 +63,7 @@ test.describe('capacity dashboard', () => {
     // user1 reaches Zone 1A directly and Zone 1B through group_1b, but has no
     // role in Parking — so Plan Parking must not appear at all.
     await logIn(page, USER1);
-    await page.goto('/capacity');
-    await waitForViewReady(page, 'capacity');
+    await openDashboard(page);
 
     await expect(page.locator('.warp-capacity-plan-name')).toHaveText(['Plan 1A', 'Plan 1B']);
     await expect(parkingCard(page)).toHaveCount(0);
@@ -66,8 +71,7 @@ test.describe('capacity dashboard', () => {
 
   test('every plan gets a card, empty plans read 0%', async ({ page }) => {
     await logIn(page, ADMIN);
-    await page.goto('/capacity');
-    await waitForViewReady(page, 'capacity');
+    await openDashboard(page);
 
     await expect(page.locator('.warp-capacity-card')).toHaveCount(3);
     const card = parkingCard(page);
@@ -83,8 +87,7 @@ test.describe('capacity dashboard', () => {
     const ts = await getFirstZoneDate(page, PARKING_PID);
     await bookSeatUI(page, PARKING_PID, seat, [ts]);
 
-    await page.goto('/capacity');
-    await waitForViewReady(page, 'capacity');
+    await openDashboard(page);
 
     const card = parkingCard(page);
     await expect(card.locator('.warp-capacity-badge')).toHaveText('20%');
@@ -95,8 +98,7 @@ test.describe('capacity dashboard', () => {
     await seedFullDay(4);   // 4/5 = 80%: at/above warn (75), below alert (90)
 
     await logIn(page, ADMIN);
-    await page.goto('/capacity');
-    await waitForViewReady(page, 'capacity');
+    await openDashboard(page);
 
     await expect(parkingCard(page).locator('.warp-capacity-badge')).toHaveClass(/warp-capacity-warn/);
     await expect(page.locator('.warp-capacity-alerts')).toBeHidden();
@@ -106,8 +108,7 @@ test.describe('capacity dashboard', () => {
     await seedFullDay(5);   // 5/5 = 100%
 
     await logIn(page, ADMIN);
-    await page.goto('/capacity');
-    await waitForViewReady(page, 'capacity');
+    await openDashboard(page);
 
     await expect(parkingCard(page).locator('.warp-capacity-badge')).toHaveClass(/warp-capacity-alert/);
 
@@ -118,12 +119,17 @@ test.describe('capacity dashboard', () => {
     await expect(alerts.locator('.warp-capacity-alert-pct')).toHaveText('100%');
   });
 
-  test('capacity is reachable from the main nav by a regular user', async ({ page }) => {
+  test('the dashboard is on Home, not in the nav; /capacity redirects there', async ({ page }) => {
     await logIn(page, USER1);
-    await page.goto('/');
-    await page.locator('#nav-left-dynamic a', { hasText: 'Capacity' }).click();
-    await waitForViewReady(page, 'capacity');
-    expect(new URL(page.url()).pathname).toBe('/capacity');
+    await openDashboard(page);
+
+    await expect(page.locator('#nav-left-dynamic a', { hasText: 'Capacity' })).toHaveCount(0);
+    await expect(page.locator('.warp-capacity-card').first()).toBeVisible();
+
+    await page.goto('/capacity');
+    await waitForViewReady(page, 'index');
+    expect(new URL(page.url()).pathname).toBe('/');
+    await expect(page.locator('.warp-capacity-card').first()).toBeVisible();
   });
 
 });

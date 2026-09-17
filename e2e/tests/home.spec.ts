@@ -1,5 +1,6 @@
 /**
- * Landing page: the short "how to use WARP" explanation every user lands on.
+ * Landing page: the short "how to use WARP" explanation every user lands on,
+ * with the Capacity dashboard underneath the intro cards.
  *
  * It used to redirect straight to the user's default plan, which meant regular
  * users never saw the page — the default plan is now a shortcut button on it
@@ -13,23 +14,16 @@ import { waitForViewReady } from '../helpers/spa';
 
 test.describe('landing page', () => {
 
-  test('explains how to book and what the dashboard is for', async ({ page }) => {
+  test('explains how to book and shows the capacity dashboard', async ({ page }) => {
     await logIn(page, USER1);
     await page.goto('/');
     await waitForViewReady(page, 'index');
 
     await expect(page.locator('.index_steps li')).toHaveCount(4);
     await expect(page.locator('.card-title', { hasText: 'How busy is the office?' })).toBeVisible();
-  });
-
-  test('the dashboard link opens the capacity view', async ({ page }) => {
-    await logIn(page, USER1);
-    await page.goto('/');
-    await waitForViewReady(page, 'index');
-
-    await page.locator('#index_capacity_link').click();
-    await waitForViewReady(page, 'capacity');
-    expect(new URL(page.url()).pathname).toBe('/capacity');
+    await expect(page.locator('.warp-capacity-card').first()).toBeVisible();
+    await expect(page.locator('#index_capacity_link')).toHaveCount(0);
+    await expect(page.getByText('Open the capacity dashboard')).toHaveCount(0);
   });
 
   test('a default plan becomes a shortcut button instead of a redirect', async ({ page }) => {

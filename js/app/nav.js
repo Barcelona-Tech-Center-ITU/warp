@@ -2,7 +2,7 @@
 
 import * as bootstrap from './bootstrap.js';
 
-// Builds the "Bookings" + accessible-plan links in the desktop nav and the
+// Builds the "Existing Bookings" + accessible-plan links in the desktop nav and the
 // #mobile-nav sidenav from /xhr/bootstrap (replaces the old server-rendered
 // headerDataL loop). Home is static in spa.html (it doesn't depend on the
 // plan list). #nav-left-dynamic is itself a <ul>, so injecting <li>s via
@@ -23,10 +23,8 @@ function itemsHTML(data) {
   // mount prefix under a reverse-proxy deployment — not hardcoded '/bookings'
   // or '/plan/'+id, which would escape the prefix and break navigation.
   var bookingsURL = window.warpGlobals.URLs['bookings'];
-  var capacityURL = window.warpGlobals.URLs['capacity'];
   var planURLTpl = window.warpGlobals.URLs['plan'];
-  var html = '<li><a href="' + bookingsURL + '" class="nav-plan-link TR">Bookings</a></li>' +
-             '<li><a href="' + capacityURL + '" class="nav-plan-link TR">Capacity</a></li>';
+  var html = '<li><a href="' + bookingsURL + '" class="nav-plan-link TR">Existing Bookings</a></li>';
   data.plans.forEach(function (p) {
     html += '<li><a href="' + planURLTpl.replace('__PID__', p.id) + '" class="nav-plan-link">' + escapeHtml(p.name) + '</a></li>';
   });
@@ -55,7 +53,7 @@ export function render() {
       // The dynamic links (.TR -> visibility:hidden until translated) were
       // injected AFTER the boot TR.updateDOM() pass, so translate both the
       // desktop nav and the mobile sidenav now — otherwise the desktop
-      // "Bookings" link renders invisible.
+      // "Existing Bookings" link renders invisible.
       if (desktop) window.TR.updateDOM(desktop);
       var mobileNavEl = document.getElementById('mobile-nav');
       if (mobileNavEl) window.TR.updateDOM(mobileNavEl);
