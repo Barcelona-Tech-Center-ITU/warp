@@ -1,6 +1,6 @@
 /**
  * Landing page: the short "how to use WARP" explanation every user lands on,
- * with the Capacity dashboard underneath the intro cards.
+ * with the occupancy dashboard underneath the how-to card.
  *
  * It used to redirect straight to the user's default plan, which meant regular
  * users never saw the page — the default plan is now a shortcut button on it
@@ -20,7 +20,9 @@ test.describe('landing page', () => {
     await waitForViewReady(page, 'index');
 
     await expect(page.locator('.index_steps li')).toHaveCount(4);
-    await expect(page.locator('.card-title', { hasText: 'How busy is the office?' })).toBeVisible();
+    await expect(page.locator('.card-title', { hasText: 'Booking a seat' })).toBeVisible();
+    await expect(page.locator('.warp-capacity-title', { hasText: 'How busy is the office?' })).toBeVisible();
+    await expect(page.locator('.card-title', { hasText: 'How busy is the office?' })).toHaveCount(0);
     await expect(page.locator('.warp-capacity-card').first()).toBeVisible();
     await expect(page.locator('#index_capacity_link')).toHaveCount(0);
     await expect(page.getByText('Open the capacity dashboard')).toHaveCount(0);

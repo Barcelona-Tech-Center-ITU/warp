@@ -132,7 +132,6 @@
         "Home": "Strona główna",
         "Existing Bookings": "Istniejące rezerwacje",
         "Report": "Raport",
-        "Capacity": "Obłożenie",
         "capacity": {
             "PeakOccupancy": "Szczytowe obłożenie dziennie",
             "Seats": "Miejsca do rezerwacji: %{count}",
@@ -148,8 +147,7 @@
             "Step3": "Kliknij wolne miejsce, aby je zarezerwować. Kliknij swoje miejsce, aby zmienić godziny lub je zwolnić.",
             "Step4": "Nie masz czasu? Przycisk + zarezerwuje za Ciebie najlepsze wolne miejsce.",
             "BookingsHint": "Istniejące rezerwacje pokazują wszystkie Twoje rezerwacje i pozwalają zwolnić niepotrzebne miejsce.",
-            "CapacityTitle": "Jak zajęte jest biuro?",
-            "CapacityText": "Panel obłożenia pokazuje dla każdego planu i każdego dnia rezerwacji, ile miejsc jest zajętych w najbardziej obleganym momencie dnia. Dzięki temu wybierzesz spokojniejszy dzień albo zobaczysz, kiedy na piętrze zabraknie miejsc: dni o wysokim obłożeniu są wyróżnione, a te najbliższe zapełnienia znajdziesz na górze."
+            "CapacityTitle": "Jak zajęte jest biuro?"
         },
         "Users": "Użytkownicy",
         "Groups": "Grupy",

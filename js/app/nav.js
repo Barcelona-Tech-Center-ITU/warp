@@ -2,7 +2,7 @@
 
 import * as bootstrap from './bootstrap.js';
 
-// Builds the "Existing Bookings" + accessible-plan links in the desktop nav and the
+// Builds the accessible-plan links + "Existing Bookings" in the desktop nav and the
 // #mobile-nav sidenav from /xhr/bootstrap (replaces the old server-rendered
 // headerDataL loop). Home is static in spa.html (it doesn't depend on the
 // plan list). #nav-left-dynamic is itself a <ul>, so injecting <li>s via
@@ -24,10 +24,11 @@ function itemsHTML(data) {
   // or '/plan/'+id, which would escape the prefix and break navigation.
   var bookingsURL = window.warpGlobals.URLs['bookings'];
   var planURLTpl = window.warpGlobals.URLs['plan'];
-  var html = '<li><a href="' + bookingsURL + '" class="nav-plan-link TR">Existing Bookings</a></li>';
+  var html = '';
   data.plans.forEach(function (p) {
     html += '<li><a href="' + planURLTpl.replace('__PID__', p.id) + '" class="nav-plan-link">' + escapeHtml(p.name) + '</a></li>';
   });
+  html += '<li><a href="' + bookingsURL + '" class="nav-plan-link TR">Existing Bookings</a></li>';
   return html;
 }
 

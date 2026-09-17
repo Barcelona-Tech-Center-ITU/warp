@@ -132,7 +132,6 @@
         "Home": "Home",
         "Existing Bookings": "Existing Bookings",
         "Report": "Report",
-        "Capacity": "Capacity",
         "capacity": {
             "PeakOccupancy": "Peak occupancy per day",
             "Seats": "%{count} bookable seats",
@@ -148,8 +147,7 @@
             "Step3": "Click a free seat to book it. Click your own seat again to change the times or release it.",
             "Step4": "In a hurry? The + button books the best available seat for you.",
             "BookingsHint": "Existing Bookings lists everything you have reserved and lets you release a seat you no longer need.",
-            "CapacityTitle": "How busy is the office?",
-            "CapacityText": "The Capacity dashboard shows, for every plan and every bookable day, how many seats are taken at the busiest moment of that day. Use it to pick a quieter day, or to see when a floor is about to run out of seats: busy days are highlighted, and the days closest to full are listed at the top."
+            "CapacityTitle": "How busy is the office?"
         },
         "Users": "Users",
         "Groups": "Groups",
