@@ -143,7 +143,7 @@
         "home": {
             "OpenDefaultPlan": "Abrir %{plan}",
             "HowToTitle": "Reservar un puesto",
-            "Step1": "Elige un plano en el menú de la parte superior de la página.",
+            "Step1": "Haz clic en «Reservar un puesto».",
             "Step2": "Selecciona en el calendario los días que necesitas y ajusta las horas.",
             "Step3": "Haz clic en un puesto libre para reservarlo. Haz clic en tu propio puesto para cambiar las horas o liberarlo.",
             "Step4": "¿Con prisa? El botón + reserva por ti el mejor puesto disponible.",

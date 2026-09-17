@@ -143,7 +143,7 @@
         "home": {
             "OpenDefaultPlan": "%{plan} öffnen",
             "HowToTitle": "Einen Platz buchen",
-            "Step1": "Wählen Sie oben im Menü einen Plan aus.",
+            "Step1": "Klicken Sie auf „Platz buchen“.",
             "Step2": "Markieren Sie im Kalender die gewünschten Tage und passen Sie die Uhrzeiten an.",
             "Step3": "Klicken Sie auf einen freien Platz, um ihn zu buchen. Ein Klick auf Ihren eigenen Platz ändert die Zeiten oder gibt ihn frei.",
             "Step4": "Keine Zeit? Die Schaltfläche + bucht automatisch den besten freien Platz.",
