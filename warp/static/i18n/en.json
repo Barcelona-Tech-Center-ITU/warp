@@ -130,7 +130,7 @@
         "Password": "Password",
         "Bookings only": "Bookings only",
         "Home": "Home",
-        "Bookings": "Bookings",
+        "Existing Bookings": "Existing Bookings",
         "Report": "Report",
         "Capacity": "Capacity",
         "capacity": {
@@ -147,10 +147,9 @@
             "Step2": "Select the days you need in the calendar, and adjust the hours.",
             "Step3": "Click a free seat to book it. Click your own seat again to change the times or release it.",
             "Step4": "In a hurry? The + button books the best available seat for you.",
-            "BookingsHint": "Bookings lists everything you have reserved and lets you release a seat you no longer need.",
+            "BookingsHint": "Existing Bookings lists everything you have reserved and lets you release a seat you no longer need.",
             "CapacityTitle": "How busy is the office?",
-            "CapacityText": "The Capacity dashboard shows, for every plan and every bookable day, how many seats are taken at the busiest moment of that day. Use it to pick a quieter day, or to see when a floor is about to run out of seats: busy days are highlighted, and the days closest to full are listed at the top.",
-            "OpenCapacity": "Open the capacity dashboard"
+            "CapacityText": "The Capacity dashboard shows, for every plan and every bookable day, how many seats are taken at the busiest moment of that day. Use it to pick a quieter day, or to see when a floor is about to run out of seats: busy days are highlighted, and the days closest to full are listed at the top."
         },
         "Users": "Users",
         "Groups": "Groups",

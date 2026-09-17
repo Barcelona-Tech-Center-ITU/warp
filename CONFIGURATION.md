@@ -327,7 +327,7 @@ independent of this system-wide window.
 
 ## Capacity dashboard
 
-The **Capacity** view (open to every user) reports, for every plan and every day
+The **Capacity** dashboard on the Home page (open to every user) reports, for every plan and every day
 of the booking window, the peak number of simultaneously booked seats as a
 percentage of the plan's bookable seats (enabled seats in a non-disabled zone).
 A regular user only sees the plans and zones they can book in; a site admin sees

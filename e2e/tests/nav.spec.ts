@@ -34,7 +34,7 @@ test.describe('desktop Home nav', () => {
 
     await expect(page.locator('#nav-home li')).toHaveClass(/active/);
 
-    await page.locator('#nav-left-dynamic a', { hasText: 'Bookings' }).click();
+    await page.locator('#nav-left-dynamic a', { hasText: 'Existing Bookings' }).click();
     await waitForViewReady(page, 'bookings');
     await expect(page.locator('#nav-home li')).not.toHaveClass(/active/);
   });

@@ -111,7 +111,6 @@ def spaURLs():
         'plansZonesForPlan': flask.url_for('xhr.plans.zonesForPlan'),
         'plansAllZones': flask.url_for('xhr.plans.allZones'),
 
-        'capacity': flask.url_for('view.capacity'),
         'capacitySummary': flask.url_for('xhr.capacity.summary'),
 
         'bookings': flask.url_for('view.bookings', report=''),
@@ -160,9 +159,8 @@ def bookings(report):
 
 @bp.route("/capacity")
 def capacity():
-    # Open to every authenticated user; the XHR scopes the numbers to the zones
-    # the caller can book in (site admins see every plan).
-    return flask.render_template('spa.html')
+    # Old bookmarks still resolve; the dashboard now lives on Home.
+    return flask.redirect(flask.url_for('view.index'))
 
 
 @bp.route("/plan/<pid>")

@@ -1,9 +1,6 @@
 "use strict";
 
-import html from './html/capacity.html';
 import Utils from './modules/utils.js';
-
-export { html };
 
 // Day timestamps are the backend's fake-UTC integers (wall-clock digits in the
 // plan's zone), so they must be read back in UTC — getDay()/getDate() would
@@ -118,4 +115,4 @@ export async function mount(ctx) {
         cards.appendChild(renderCard(p, data.thresholds));
 }
 
-export default { html, mount };
+export default { mount };
