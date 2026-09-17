@@ -1611,6 +1611,17 @@ nav .lang-dropdown {
     box-shadow: none;
 }
 
+.warp-users-fabs {
+    position: fixed;
+    right: 23px;
+    bottom: 23px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
 /* Keep Materialize 2.x's rounded-square M3 FAB shape and make sure the icon
    is reliably centered in our markup. 2.x's grid can shift if our icon styles
    conflict, so we force grid centering and explicitly pin the M2 radius. */

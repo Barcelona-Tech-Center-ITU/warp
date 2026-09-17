@@ -12,6 +12,7 @@ import { clearFieldError, showFieldError } from '../lib/formDialog.js';
 import { confirmDelete } from '../lib/confirmDelete.js';
 import { lazyCache } from '../lib/lazyCache.js';
 import { labelFormatter, iconFormatter } from '../lib/formatters.js';
+import { buildDataTable } from '../lib/dataTable.js';
 
 export { html };
 
@@ -295,6 +296,112 @@ export async function mount(ctx) {
 
     root.querySelector('#add_user_btn').addEventListener('click', function(e) {
         showEditDialog();
+    }, {signal: ctx.signal});
+
+    var bulkFileEl = root.querySelector('#bulk_import_file');
+    var bulkBtn = root.querySelector('#bulk_import_btn');
+    bulkBtn.title = TR("bulkImport.Import users from CSV");
+    bulkBtn.setAttribute('aria-label', TR("bulkImport.Import users from CSV"));
+
+    function csvEscape(value) {
+        let s = value == null ? '' : String(value);
+        if (/[",\n\r]/.test(s))
+            return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+    }
+
+    function downloadPasswordsCsv(rows) {
+        let lines = ['email,password'];
+        for (let r of rows)
+            lines.push(csvEscape(r.email) + ',' + csvEscape(r.password));
+        let blob = new Blob([lines.join('\n') + '\n'], {type: 'text/csv;charset=utf-8'});
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'warp-user-passwords.csv';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    function bulkReasonText(reason) {
+        let key = 'bulkImport.' + reason;
+        return TR.has(key) ? TR(key) : reason;
+    }
+
+    function showBulkResult(result) {
+        let passwords = result.passwords || [];
+        let failed = result.failed || [];
+        let created = result.created || 0;
+
+        if (passwords.length)
+            downloadPasswordsCsv(passwords);
+
+        let container = document.createElement('div');
+        if (created)
+            container.appendChild(document.createTextNode(
+                TR("bulkImport.Created %{smart_count} user(s)", {smart_count: created})));
+        else
+            container.appendChild(document.createTextNode(TR("bulkImport.No users were created.")));
+
+        if (failed.length) {
+            container.appendChild(document.createElement('br'));
+            container.appendChild(document.createElement('br'));
+            let failHeader = container.appendChild(document.createElement('b'));
+            failHeader.innerText = TR("bulkImport.Failed %{smart_count} row(s)", {smart_count: failed.length});
+            container.appendChild(buildDataTable(
+                [[TR("bulkImport.Row"), TR("bulkImport.Email"), TR("bulkImport.Reason")]].concat(
+                    failed.map(function(f) {
+                        return [String(f.row), f.email || '', bulkReasonText(f.reason)];
+                    })
+                )
+            ));
+        }
+
+        let buttons = [];
+        if (passwords.length)
+            buttons.push({ id: 'download', text: TR("btn.Download passwords") });
+        buttons.push({ id: 'ok', text: TR("btn.Ok") });
+
+        WarpModal.getInstance().open(TR("bulkImport.Import users from CSV"), container.outerHTML, {
+            buttons: buttons,
+            onButtonHook: function(id) {
+                if (id === 'download' && passwords.length)
+                    downloadPasswordsCsv(passwords);
+                passwords = [];
+            },
+            onCancelHook: function() { passwords = []; }
+        });
+    }
+
+    bulkBtn.addEventListener('click', function() {
+        bulkFileEl.click();
+    }, {signal: ctx.signal});
+
+    bulkFileEl.addEventListener('change', function() {
+        let file = bulkFileEl.files && bulkFileEl.files[0];
+        bulkFileEl.value = '';
+        if (!file)
+            return;
+
+        let formData = new FormData();
+        formData.append('file', file, file.name || 'users.csv');
+
+        Utils.xhr.post(
+            window.warpGlobals.URLs['usersBulk'],
+            formData,
+            {toastOnSuccess: false, errorOnFailure: false})
+        .then(function(value) {
+            table.replaceData();
+            showBulkResult(value.response);
+        }).catch(function(value) {
+            let reason = value.response && value.response.reason;
+            let msg = reason && TR.has('bulkImport.' + reason)
+                ? TR('bulkImport.' + reason)
+                : (value.errorMsg || String(value));
+            WarpModal.getInstance().open(TR("Error"), msg);
+        });
     }, {signal: ctx.signal});
 
     return function unmount() {
