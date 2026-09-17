@@ -143,7 +143,7 @@
         "home": {
             "OpenDefaultPlan": "Ouvrir %{plan}",
             "HowToTitle": "Réserver une place",
-            "Step1": "Choisissez un plan dans le menu en haut de la page.",
+            "Step1": "Cliquez sur « Réserver une place ».",
             "Step2": "Sélectionnez les jours souhaités dans le calendrier et ajustez les horaires.",
             "Step3": "Cliquez sur une place libre pour la réserver. Cliquez sur votre propre place pour modifier les horaires ou la libérer.",
             "Step4": "Pressé ? Le bouton + réserve pour vous la meilleure place disponible.",

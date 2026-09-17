@@ -143,7 +143,7 @@
         "home": {
             "OpenDefaultPlan": "Open %{plan}",
             "HowToTitle": "Booking a seat",
-            "Step1": "Pick a plan from the menu at the top of the page.",
+            "Step1": "Click on Book Your Seat.",
             "Step2": "Select the days you need in the calendar, and adjust the hours.",
             "Step3": "Click a free seat to book it. Click your own seat again to change the times or release it.",
             "Step4": "In a hurry? The + button books the best available seat for you.",
