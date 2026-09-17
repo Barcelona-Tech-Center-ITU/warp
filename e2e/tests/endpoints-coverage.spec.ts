@@ -65,6 +65,7 @@ const COVERED_ENDPOINTS: ReadonlySet<string> = new Set([
   '/xhr/plans/zonesForPlan',
 
   // xhr — users
+  '/xhr/users/bulk',
   '/xhr/users/delete',
   '/xhr/users/edit',
   '/xhr/users/groups/<login>',

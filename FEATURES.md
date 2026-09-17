@@ -518,19 +518,27 @@ The old "Already booked in another zone" section is gone; an existing booking on
 - Show/hide password toggle.
 - **Add to group**: a chip-input field with autocomplete. The new user is immediately added to the selected groups.
 
-### 12.3 Editing a User
+### 12.3 Bulk import
+- Site admins can import users from a CSV via the upload button on the Users page.
+- Header (this order): `email,account_type,group`. Login and display name are **not** in the file: both are the part of `email` before `@` (`this.name@domain.com` → login and name `this.name`). Email is not stored.
+- `account_type` is a case-insensitive name: `Admin`, `User`, or `Blocked`.
+- `group` is optional and is a Group ID (the group's login). Empty means no group. If set, that group must already exist; otherwise that row fails and the user is not created.
+- Rows are processed independently: a failure does not stop the rest of the file. At the end a dialog lists created vs failed counts and each failed row (row number, email, reason).
+- Each created user gets a generated password (same 10-character alphabet as **Generate password**). The browser downloads an `email,password` CSV built from the response; the file is never written on the server.
+
+### 12.4 Editing a User
 - Login is read-only (cannot be changed after creation).
 - Name, account type, and password can be updated.
 - Password is optional on update (leave blank to keep the current one).
 - Group memberships can be changed.
 
-### 12.4 Deleting a User
+### 12.5 Deleting a User
 - A confirmation dialog warns that past booking history will be lost.
 - If the user has past bookings, a second warning is shown with the count. The admin can choose **force delete** to proceed anyway.
 - **Blocking** is recommended as a less destructive alternative (preserves booking history).
 - You cannot delete your own account from the user management UI.
 
-### 12.5 Groups
+### 12.6 Groups
 - Groups are virtual "user" accounts with `account_type = 100`.
 - They appear in the **Groups** management page (separate from regular users).
 - A group has a **Group ID** (login) and **Group Name** (display name).
@@ -813,6 +821,7 @@ menus) switches between them, showing a **moon** icon in light mode and a **sun*
 | Create/edit/delete plans              | ❌  | ❌  | ❌  | ✅  |
 | Upload/replace plan map               | ❌  | ❌  | ❌  | ✅  |
 | Create/edit/delete users              | ❌  | ❌  | ❌  | ✅  |
+| Bulk-import users from CSV            | ❌  | ❌  | ❌  | ✅  |
 | Create/edit/delete groups             | ❌  | ❌  | ❌  | ✅  |
 | Access booking report                 | ❌  | ❌  | ❌  | ✅  |
 | See others' bookings on the list      | ❌  | ❌  | ✅  | ✅  |

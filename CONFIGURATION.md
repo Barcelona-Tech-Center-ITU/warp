@@ -650,8 +650,7 @@ WARP_LDAP_GROUP_MAP="[ ['CN=warp_allowed,CN=Users,DC=samdom,DC=example,DC=com', 
 
 ### Importing users manually
 
-Users can be added one by one from the admin UI, or imported directly into the database.
-Insert rows into the `user` table (see `warp/sql/schema.sql` for the schema).
+Users can be added one by one from the admin UI, or **bulk-imported from a CSV** on the Users page (`email,account_type,group` — login and display name are derived from the email; see FEATURES.md §12.3). They can also be inserted directly into the `users` table (see `warp/sql/schema.sql` for the schema).
 
 Account type values:
 

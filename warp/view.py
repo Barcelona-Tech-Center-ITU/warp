@@ -80,6 +80,7 @@ def spaURLs():
 
         'usersList': flask.url_for('xhr.users.list'),
         'usersEdit': flask.url_for('xhr.users.edit'),
+        'usersBulk': flask.url_for('xhr.users.bulk'),
         'usersDelete': flask.url_for('xhr.users.delete'),
         'userGroups': flask.url_for('xhr.users.groups', login='__LOGIN__'),
 
