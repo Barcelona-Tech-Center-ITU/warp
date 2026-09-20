@@ -577,10 +577,19 @@ nav .lang-dropdown {
     height: auto;
 }
 
-/* Landing page: logo hero + a short "how to use WARP" explanation. #view-root
-   clips its overflow (see above), so the page scrolls inside its own container. */
-.index_home {
+/* Landing page: logo hero + how-to + occupancy cards. On Home only, #view-root
+   is the scrollport so the bar sits on the viewport edge (under the top bar)
+   instead of on the centered .container column. Keyed off the Home root itself
+   (not body[data-view], which is only set after mount) so overflow tracks the
+   markup. Other views keep overflow:hidden so Tabulator tables still get a
+   definite height. */
+#view-root:has(> .index_home) {
     overflow-y: auto;
+}
+#view-root > .index_home {
+    flex: 0 0 auto;
+    min-height: auto;
+    overflow: visible;
 }
 .index_hero {
     text-align: center;
@@ -2505,7 +2514,7 @@ input[type=range]::-moz-range-track {
    peak/capacity figure. The three occupancy levels (ok / warn / alert) are the
    only colour decision here and reuse existing semantic roles — the thresholds
    themselves come from the server (CAPACITY_*_THRESHOLD). Scrolls with
-   .index_home, not in its own pane. */
+   #view-root on Home, not in its own pane. */
 .warp-capacity {
     margin-top: var(--warp-space-4);
 }
