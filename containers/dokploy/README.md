@@ -49,13 +49,13 @@ compose file already declares its own private network for the database.
 
 ### 2. Set the environment
 
-Paste [`.env.example`](.env.example) into the *Environment* tab and replace the
-two `change-me` values:
+Paste [`.env.example`](.env.example) into the *Environment* tab and fill in the
+two empty values (the deploy fails until both are set):
 
 | Variable            | How to set it                                        |
 | ------------------- | ---------------------------------------------------- |
 | `WARP_SECRET_KEY`   | `openssl rand -hex 32` — the Flask cookie-signing key |
-| `POSTGRES_PASSWORD` | A strong password; used by both containers            |
+| `POSTGRES_PASSWORD` | `openssl rand -hex 24` — used by both containers      |
 
 Dokploy writes this tab into a `.env` file next to the compose file, and
 `warp-app` loads it, so **any** setting from [CONFIGURATION.md](../../CONFIGURATION.md)
