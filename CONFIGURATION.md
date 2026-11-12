@@ -59,6 +59,8 @@ environment:
 | `SECRET_KEY`                 | —            | **yes**¹ | Cookie signing key                             |
 | `DATABASE_ARGS`              | `{}`         |    no    | Extra args for the psycopg3 driver             |
 | `SESSION_LIFETIME`           | `1`          |    no    | Session duration in days                       |
+| `SESSION_COOKIE_SAMESITE`    | `Lax`        |    no    | Session cookie SameSite (`None` for SAML POST binding) |
+| `SESSION_COOKIE_SECURE`      | `false`      |    no    | Send the session cookie over HTTPS only        |
 | `LANGUAGES`                  | `["en","de","fr","es","pl"]` |    no    | Locale codes offered in the picker (ships all five; narrow via this list) |
 | `DEFAULT_LANGUAGE`           | `en`         |    no    | Fallback language (NULL user pref + no cookie). Must be listed in `LANGUAGES` |
 | `THEME_FILE`                 | `theme.css`  |    no    | Colour theme stylesheet (`static/`-relative name, or absolute path/URL) |
@@ -306,6 +308,8 @@ independent of this system-wide window.
 | Variable           | Default | Description                                                                                                                                                                       |
 | ------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SESSION_LIFETIME` | `1`     | Number of days before a login session expires and the user must re-authenticate. Note: advancing the virtual clock in debug/test mode by more than one day also expires sessions. |
+| `SESSION_COOKIE_SAMESITE` | `Lax` | SameSite attribute of the session cookie. `Lax` stops other sites from sending it on cross-site form posts (CSRF). Use `None` only for SAML POST binding (see [SAML](#saml-20-native)), which also requires `SESSION_COOKIE_SECURE=true`. |
+| `SESSION_COOKIE_SECURE` | `false` | Send the session cookie over HTTPS only. Set `true` in any deployment served over HTTPS. |
 
 ---
 

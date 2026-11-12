@@ -38,6 +38,13 @@ def create_app():
 
     initConfig(app)
 
+    @app.after_request
+    def _security_headers(resp):
+        resp.headers.setdefault('X-Frame-Options', 'DENY')
+        resp.headers.setdefault('X-Content-Type-Options', 'nosniff')
+        resp.headers.setdefault('Referrer-Policy', 'same-origin')
+        return resp
+
     if app.config['BASE_PATH']:
         app.wsgi_app = _BasePathMiddleware(app.wsgi_app, app.config['BASE_PATH'])
 

@@ -33,6 +33,10 @@ class DefaultSettings(object):
     # after how many days force user to re-login (note that it is not a session timeout)
     SESSION_LIFETIME = 1
 
+    # Browsers must not send the session cookie on cross-site POSTs (CSRF).
+    # SAML POST binding needs None (+ SESSION_COOKIE_SECURE) — see CONFIGURATION.md.
+    SESSION_COOKIE_SAMESITE = "Lax"
+
     # for how many weeks in advance users can book a seat
     # (after the current week)
     WEEKS_IN_ADVANCE = 1

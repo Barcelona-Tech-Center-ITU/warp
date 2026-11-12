@@ -175,7 +175,7 @@ def listW(report = False):      # list is a built-in type
         # only xlsx for now
         memoryBuffer = io.BytesIO()
 
-        workbook = xlsxwriter.Workbook(memoryBuffer, {'in_memory': True})
+        workbook = xlsxwriter.Workbook(memoryBuffer, {'in_memory': True, 'strings_to_formulas': False})
         worksheet = workbook.add_worksheet()
 
         # TODO_TR
